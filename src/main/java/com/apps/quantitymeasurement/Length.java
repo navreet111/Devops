@@ -1,6 +1,6 @@
 package com.apps.quantitymeasurement;
 
-import java.util.Objects;
+// import java.util.Objects;
 
 public class Length {
 
@@ -19,7 +19,9 @@ public class Length {
     // Enum for units
     public enum LengthUnit {
         FEET(12.0),
-        INCHES(1.0);
+        INCHES(1.0),
+        YARDS(36.0),
+        CENTIMETERS(0.393701);
 
         private final double conversionFactor;
 
@@ -51,10 +53,10 @@ public class Length {
     }
 
     // (Best practice) override hashCode when equals is overridden
-    @Override
-    public int hashCode() {
-        return Objects.hash(toInches());
-    }
+    // @Override
+    // public int hashCode() {
+    //     return Objects.hash(toInches());
+    // }
 
     // Demo method
     public static void demonstrateLengthEquality() {

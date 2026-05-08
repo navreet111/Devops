@@ -58,5 +58,43 @@ public class QuantityMeasurementApp {
     //    demonstrateFeetEquality();
     //    demonstrateInchesEquality();
        Length.demonstrateLengthEquality();
+        Length l1 =
+            new Length(1.0,
+            Length.LengthUnit.YARDS);
+
+    Length l2 =
+            new Length(36.0,
+            Length.LengthUnit.INCHES);
+
+    System.out.println(
+            "1 Yard == 36 Inches : "
+            + l1.equals(l2)
+    );
+
+    Length l3 =
+            new Length(3.0,
+            Length.LengthUnit.FEET);
+
+    Length l4 =
+            new Length(1.0,
+            Length.LengthUnit.YARDS);
+
+    System.out.println(
+            "3 Feet == 1 Yard : "
+            + l3.equals(l4)
+    );
+
+    Length l5 =
+            new Length(1.0,
+            Length.LengthUnit.CENTIMETERS);
+
+    Length l6 =
+            new Length(0.393701,
+            Length.LengthUnit.INCHES);
+
+    System.out.println(
+            "1 CM == 0.393701 Inches : "
+            + l5.equals(l6)
+    );
     }
 }
