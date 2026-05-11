@@ -12,6 +12,9 @@ public class Length {
         if (unit == null) {
             throw new IllegalArgumentException("Unit cannot be null");
         }
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("Invalid numeric value");
+        }
         this.value = value;
         this.unit = unit;
     }
@@ -58,11 +61,39 @@ public class Length {
     //     return Objects.hash(toInches());
     // }
 
-    // Demo method
-    public static void demonstrateLengthEquality() {
-        Length l1 = new Length(1.0, LengthUnit.FEET);
-        Length l2 = new Length(12.0, LengthUnit.INCHES);
+    
+    
+    
+    // Convert from one unit to another
+     public  Length convertTo(LengthUnit targetUnit) {
 
-        System.out.println("Length equal: " + l1.equals(l2));
+    // Validation
+    if (targetUnit == null) {
+        throw new IllegalArgumentException("Units cannot be null");
+    }
+
+    
+
+    // Convert source → base unit (inches)
+    double inches = this.value * this.unit.getConversionFactor();
+
+    // Convert base unit → target
+    double convertedValue =inches / targetUnit.conversionFactor;
+    return new Length(convertedValue,targetUnit);
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public LengthUnit getUnit() {
+        return unit;
+    }
+
+    @Override
+    public String toString() {
+
+        return value + " " + unit;
     }
 }
+

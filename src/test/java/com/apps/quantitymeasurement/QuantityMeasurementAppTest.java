@@ -289,5 +289,180 @@ public class QuantityMeasurementAppTest {
         assertTrue(feet.equals(inches));
         assertTrue(yards.equals(inches));
     }
+    // UC5 Conversion Test Cases
+@Test
+void testConversion_FeetToInches() {
 
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    1.0,
+                    Length.LengthUnit.FEET,
+                    Length.LengthUnit.INCHES
+            );
+
+    assertEquals(12.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_InchesToFeet() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    24.0,
+                    Length.LengthUnit.INCHES,
+                    Length.LengthUnit.FEET
+            );
+
+    assertEquals(2.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_YardsToInches() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    1.0,
+                    Length.LengthUnit.YARDS,
+                    Length.LengthUnit.INCHES
+            );
+
+    assertEquals(36.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_InchesToYards() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    72.0,
+                    Length.LengthUnit.INCHES,
+                    Length.LengthUnit.YARDS
+            );
+
+    assertEquals(2.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_CentimetersToInches() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    2.54,
+                    Length.LengthUnit.CENTIMETERS,
+                    Length.LengthUnit.INCHES
+            );
+
+    assertEquals(1.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_FeetToYard() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    6.0,
+                    Length.LengthUnit.FEET,
+                    Length.LengthUnit.YARDS
+            );
+
+    assertEquals(2.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_RoundTrip_PreservesValue() {
+
+    Length first =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    5.0,
+                    Length.LengthUnit.FEET,
+                    Length.LengthUnit.INCHES
+            );
+
+    Length second =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    first.getValue(),
+                    Length.LengthUnit.INCHES,
+                    Length.LengthUnit.FEET
+            );
+
+    assertEquals(5.0, second.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_ZeroValue() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    0.0,
+                    Length.LengthUnit.FEET,
+                    Length.LengthUnit.INCHES
+            );
+
+    assertEquals(0.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_NegativeValue() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    -1.0,
+                    Length.LengthUnit.FEET,
+                    Length.LengthUnit.INCHES
+            );
+
+    assertEquals(-12.0, result.getValue(), 1e-6);
+}
+
+@Test
+void testConversion_InvalidUnit_Throws() {
+
+    assertThrows(
+            IllegalArgumentException.class,
+            () -> QuantityMeasurementApp.demonstrateLengthConversion(
+                    1.0,
+                    null,
+                    Length.LengthUnit.INCHES
+            )
+    );
+}
+
+@Test
+void testConversion_NaNOrInfinite_Throws() {
+
+    assertThrows(
+            IllegalArgumentException.class,
+            () -> QuantityMeasurementApp.demonstrateLengthConversion(
+                    Double.NaN,
+                    Length.LengthUnit.FEET,
+                    Length.LengthUnit.INCHES
+            )
+    );
+
+    assertThrows(
+            IllegalArgumentException.class,
+            () -> QuantityMeasurementApp.demonstrateLengthConversion(
+                    Double.POSITIVE_INFINITY,
+                    Length.LengthUnit.FEET,
+                    Length.LengthUnit.INCHES
+            )
+    );
+}
+
+@Test
+void testConversion_PrecisionTolerance() {
+
+    Length result =
+            QuantityMeasurementApp.demonstrateLengthConversion(
+                    2.54,
+                    Length.LengthUnit.CENTIMETERS,
+                    Length.LengthUnit.INCHES
+            );
+
+    assertEquals(
+            1.0,
+            result.getValue(),
+            1e-6
+    );
+}
 }
