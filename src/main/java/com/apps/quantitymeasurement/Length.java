@@ -72,8 +72,6 @@ public class Length {
         throw new IllegalArgumentException("Units cannot be null");
     }
 
-    
-
     // Convert source → base unit (inches)
     double inches = this.value * this.unit.getConversionFactor();
 
@@ -95,5 +93,24 @@ public class Length {
 
         return value + " " + unit;
     }
+
+    //uc6
+    public Length add(Length otherLength) {
+    if (otherLength == null) {
+        throw new IllegalArgumentException("Length cannot be null");
+    }
+
+    // convert both into inches
+    double thisInches =this.value * this.unit.getConversionFactor();
+
+    double otherInches =otherLength.value * otherLength.unit.getConversionFactor();
+
+    // add
+    double totalInches =thisInches + otherInches;
+
+    // convert back into first operand unit
+    double resultValue =totalInches / this.unit.getConversionFactor();
+    return new Length(resultValue, this.unit);
+}
 }
 

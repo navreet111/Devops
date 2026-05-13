@@ -104,7 +104,22 @@ public class QuantityMeasurementApp {
 
         System.out.println("Converted " +length +" to " +convertedLength);
         return convertedLength;
+        
     }
+     public static Length demonstrateLengthAddition(
+            Length length1,
+            Length length2) {
+
+        Length result =
+                length1.add(length2);
+
+        System.out.println(
+                "Addition Result : "
+                        + result
+        );
+
+        return result;
+}
 
     public static void main(String[] args) {
 
@@ -217,5 +232,51 @@ public class QuantityMeasurementApp {
 
         demonstrateLengthConversion(yard,Length.LengthUnit.INCHES
 );
+        demonstrateLengthAddition(
+                new Length(1.0,Length.LengthUnit.FEET),
+                new Length(2.0,Length.LengthUnit.FEET));
+        
+
+        // 1 FEET + 12 INCHES = 2 FEET
+        demonstrateLengthAddition(
+                new Length(1.0,Length.LengthUnit.FEET),
+                new Length(12.0,Length.LengthUnit.INCHES));
+        
+
+        // 12 INCHES + 1 FEET = 24 INCHES
+         demonstrateLengthAddition(
+                new Length(12.0,Length.LengthUnit.INCHES),
+                new Length(1.0,Length.LengthUnit.FEET));
+        
+
+        // 1 YARD + 3 FEET = 2 YARDS
+          demonstrateLengthAddition(
+               new Length(1.0,Length.LengthUnit.YARDS),
+               new Length(3.0,Length.LengthUnit.FEET));
+       
+
+        // 36 INCHES + 1 YARD = 72 INCHES
+        demonstrateLengthAddition(
+                new Length(36.0,Length.LengthUnit.INCHES),
+                new Length(1.0,Length.LengthUnit.YARDS));
+        
+
+        // 2.54 CM + 1 INCH = ~5.08 CM
+        demonstrateLengthAddition(
+                new Length(2.54,Length.LengthUnit.CENTIMETERS),
+                new Length(1.0,Length.LengthUnit.INCHES));
+       
+
+        // 5 FEET + 0 INCHES = 5 FEET
+        demonstrateLengthAddition(
+                new Length(5.0,Length.LengthUnit.FEET),
+                new Length(0.0,Length.LengthUnit.INCHES));
+       
+
+        // 5 FEET + (-2 FEET) = 3 FEET
+        demonstrateLengthAddition(
+                new Length(5.0,Length.LengthUnit.FEET),
+                new Length(-2.0,Length.LengthUnit.FEET));
+       
     }
-}
+    }
