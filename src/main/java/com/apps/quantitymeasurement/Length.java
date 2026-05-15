@@ -96,21 +96,53 @@ public class Length {
 
     //uc6
     public Length add(Length otherLength) {
+    // if (otherLength == null) {
+    //     throw new IllegalArgumentException("Length cannot be null");
+    // }
+
+    // // convert both into inches
+    // double thisInches =this.value * this.unit.getConversionFactor();
+
+    // double otherInches =otherLength.value * otherLength.unit.getConversionFactor();
+
+    // // add
+    // double totalInches =thisInches + otherInches;
+
+    // // convert back into first operand unit
+    // double resultValue =totalInches / this.unit.getConversionFactor();
+    // return new Length(resultValue, this.unit);
+    return add(otherLength,this.unit);
+}
+    // UC7
+     public Length add(
+        Length otherLength,
+        LengthUnit targetUnit
+     ) {
+
     if (otherLength == null) {
         throw new IllegalArgumentException("Length cannot be null");
     }
 
-    // convert both into inches
-    double thisInches =this.value * this.unit.getConversionFactor();
+    if (targetUnit == null) {
+        throw new IllegalArgumentException("Target unit cannot be null");
+    }
 
-    double otherInches =otherLength.value * otherLength.unit.getConversionFactor();
+    // convert both into inches
+    double thisInches =
+            this.value * this.unit.getConversionFactor();
+
+    double otherInches =
+            otherLength.value *
+                    otherLength.unit.getConversionFactor();
 
     // add
-    double totalInches =thisInches + otherInches;
+    double totalInches = thisInches + otherInches;
 
-    // convert back into first operand unit
-    double resultValue =totalInches / this.unit.getConversionFactor();
-    return new Length(resultValue, this.unit);
+    // convert into target unit
+    double resultValue =
+            totalInches / targetUnit.getConversionFactor();
+
+    return new Length(resultValue, targetUnit);
 }
 }
 

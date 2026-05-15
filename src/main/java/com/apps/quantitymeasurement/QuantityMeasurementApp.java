@@ -120,6 +120,21 @@ public class QuantityMeasurementApp {
 
         return result;
 }
+public static Length demonstrateLengthAddition(
+        Length length1,
+        Length length2,
+        Length.LengthUnit targetUnit
+) {
+
+    Length result =
+            length1.add(length2, targetUnit);
+
+    System.out.println(
+            "Addition Result : " + result
+    );
+
+    return result;
+}
 
     public static void main(String[] args) {
 
@@ -277,6 +292,30 @@ public class QuantityMeasurementApp {
         demonstrateLengthAddition(
                 new Length(5.0,Length.LengthUnit.FEET),
                 new Length(-2.0,Length.LengthUnit.FEET));
+
+                demonstrateLengthAddition(
+            new Length(1.0, Length.LengthUnit.FEET),
+            new Length(12.0, Length.LengthUnit.INCHES),
+            Length.LengthUnit.FEET
+    );
+
+    demonstrateLengthAddition(
+            new Length(1.0, Length.LengthUnit.FEET),
+            new Length(12.0, Length.LengthUnit.INCHES),
+            Length.LengthUnit.INCHES
+    );
+
+    demonstrateLengthAddition(
+            new Length(1.0, Length.LengthUnit.FEET),
+            new Length(12.0, Length.LengthUnit.INCHES),
+            Length.LengthUnit.YARDS
+    );
+
+    demonstrateLengthAddition(
+            new Length(2.54, Length.LengthUnit.CENTIMETERS),
+            new Length(1.0, Length.LengthUnit.INCHES),
+            Length.LengthUnit.CENTIMETERS
+    );
        
     }
     }
