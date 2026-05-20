@@ -19,41 +19,33 @@ public class Length {
         this.unit = unit;
     }
 
-    // Enum for units
-    public enum LengthUnit {
-        FEET(12.0),
-        INCHES(1.0),
-        YARDS(36.0),
-        CENTIMETERS(0.393701);
+    
 
-        private final double conversionFactor;
-
-        LengthUnit(double conversionFactor) {
-            this.conversionFactor = conversionFactor;
-        }
-
-        public double getConversionFactor() {
-            return conversionFactor;
-        }
-    }
-
-    // Convert to base unit (inches)
-    private double toInches() {
-        return value * unit.getConversionFactor();
-    }
+   
 
     // Equals method
-    @Override
-    public boolean equals(Object obj) {
+   @Override
+public boolean equals(Object obj) {
 
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        Length other = (Length) obj;
-
-        return Double.compare(this.toInches(), other.toInches()) == 0;
+    if (this == obj) {
+        return true;
     }
+
+    if (obj == null || getClass() != obj.getClass()) {
+        return false;
+    }
+
+    Length other = (Length) obj;
+
+    double difference =
+            Math.abs(
+                    this.unit.convertToBaseUnit(this.value)
+                    -
+                    other.unit.convertToBaseUnit(other.value)
+            );
+
+    return difference < 1e-6;
+}
 
     // (Best practice) override hashCode when equals is overridden
     // @Override
@@ -64,21 +56,20 @@ public class Length {
     
     
     
-    // Convert from one unit to another
-     public  Length convertTo(LengthUnit targetUnit) {
+    public Length convertTo(LengthUnit targetUnit) {
 
-    // Validation
     if (targetUnit == null) {
         throw new IllegalArgumentException("Units cannot be null");
     }
 
-    // Convert source → base unit (inches)
-    double inches = this.value * this.unit.getConversionFactor();
+    double baseValue =
+            unit.convertToBaseUnit(this.value);
 
-    // Convert base unit → target
-    double convertedValue =inches / targetUnit.conversionFactor;
-    return new Length(convertedValue,targetUnit);
-    }
+    double convertedValue =
+            targetUnit.convertFromBaseUnit(baseValue);
+
+    return new Length(convertedValue, targetUnit);
+}
 
     public double getValue() {
         return value;
@@ -94,53 +85,49 @@ public class Length {
         return value + " " + unit;
     }
 
-    //uc6
     public Length add(Length otherLength) {
-    // if (otherLength == null) {
-    //     throw new IllegalArgumentException("Length cannot be null");
-    // }
-
-    // // convert both into inches
-    // double thisInches =this.value * this.unit.getConversionFactor();
-
-    // double otherInches =otherLength.value * otherLength.unit.getConversionFactor();
-
-    // // add
-    // double totalInches =thisInches + otherInches;
-
-    // // convert back into first operand unit
-    // double resultValue =totalInches / this.unit.getConversionFactor();
-    // return new Length(resultValue, this.unit);
-    return add(otherLength,this.unit);
-}
-    // UC7
-     public Length add(
-        Length otherLength,
-        LengthUnit targetUnit
-     ) {
 
     if (otherLength == null) {
         throw new IllegalArgumentException("Length cannot be null");
     }
 
-    if (targetUnit == null) {
-        throw new IllegalArgumentException("Target unit cannot be null");
+    double thisBase =
+            unit.convertToBaseUnit(this.value);
+
+    double otherBase =
+            otherLength.unit.convertToBaseUnit(
+                    otherLength.value
+            );
+
+    double totalBase = thisBase + otherBase;
+
+    double resultValue =
+            this.unit.convertFromBaseUnit(totalBase);
+
+    return new Length(resultValue, this.unit);
+}
+
+    public Length add(
+        Length otherLength,
+        LengthUnit targetUnit
+) {
+
+    if (otherLength == null || targetUnit == null) {
+        throw new IllegalArgumentException("Invalid input");
     }
 
-    // convert both into inches
-    double thisInches =
-            this.value * this.unit.getConversionFactor();
+    double thisBase =
+            unit.convertToBaseUnit(this.value);
 
-    double otherInches =
-            otherLength.value *
-                    otherLength.unit.getConversionFactor();
+    double otherBase =
+            otherLength.unit.convertToBaseUnit(
+                    otherLength.value
+            );
 
-    // add
-    double totalInches = thisInches + otherInches;
+    double totalBase = thisBase + otherBase;
 
-    // convert into target unit
     double resultValue =
-            totalInches / targetUnit.getConversionFactor();
+            targetUnit.convertFromBaseUnit(totalBase);
 
     return new Length(resultValue, targetUnit);
 }
