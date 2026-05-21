@@ -113,7 +113,55 @@ public class QuantityMeasurementApp {
 
         return result;
     }
-    
+    // Weight equality
+public static boolean demonstrateWeightEquality(
+        Weight weight1,
+        Weight weight2) {
+
+    boolean result = weight1.equals(weight2);
+
+    System.out.println(result);
+
+    return result;
+}
+
+// Weight conversion
+public static Weight demonstrateWeightConversion(
+        Weight weight,
+        WeightUnit targetUnit) {
+
+    Weight result = weight.convertTo(targetUnit);
+
+    System.out.println(result);
+
+    return result;
+}
+
+// Weight addition
+public static Weight demonstrateWeightAddition(
+        Weight weight1,
+        Weight weight2) {
+
+    Weight result = weight1.add(weight2);
+
+    System.out.println(result);
+
+    return result;
+}
+
+// Weight addition with target unit
+public static Weight demonstrateWeightAddition(
+        Weight weight1,
+        Weight weight2,
+        WeightUnit targetUnit) {
+
+    Weight result =
+            weight1.add(weight2, targetUnit);
+
+    System.out.println(result);
+
+    return result;
+}
 
     public static void main(String[] args) {
 
@@ -292,6 +340,91 @@ public class QuantityMeasurementApp {
                 new Length(2.54, LengthUnit.CENTIMETERS),
                 new Length(1.0, LengthUnit.INCHES),
                 LengthUnit.CENTIMETERS
+        );
+
+
+        //uc9
+        demonstrateWeightEquality(
+        new Weight(1.0, WeightUnit.KILOGRAM),
+        new Weight(1.0, WeightUnit.KILOGRAM)
+       );
+
+        demonstrateWeightEquality(
+        new Weight(1.0, WeightUnit.KILOGRAM),
+        new Weight(1000.0, WeightUnit.GRAM)
+        );
+
+        demonstrateWeightEquality(
+        new Weight(2.0, WeightUnit.POUND),
+        new Weight(2.0, WeightUnit.POUND)
+        );
+
+        demonstrateWeightEquality(
+        new Weight(1.0, WeightUnit.KILOGRAM),
+        new Weight(2.20462, WeightUnit.POUND)
+        );
+
+        demonstrateWeightEquality(
+        new Weight(500.0, WeightUnit.GRAM),
+        new Weight(0.5, WeightUnit.KILOGRAM)
+        );
+
+        demonstrateWeightEquality(
+        new Weight(1.0, WeightUnit.POUND),
+        new Weight(453.592, WeightUnit.GRAM)
+        );
+
+        demonstrateWeightConversion(
+        new Weight(1.0, WeightUnit.KILOGRAM),
+        WeightUnit.GRAM
+        );
+
+        demonstrateWeightConversion(
+        new Weight(2.0, WeightUnit.POUND),
+        WeightUnit.KILOGRAM
+        );
+
+        demonstrateWeightConversion(
+        new Weight(500.0, WeightUnit.GRAM),
+        WeightUnit.POUND
+        );
+
+        demonstrateWeightConversion(
+        new Weight(0.0, WeightUnit.KILOGRAM),
+        WeightUnit.GRAM
+        );
+
+        demonstrateWeightAddition(
+        new Weight(1.0, WeightUnit.KILOGRAM),
+        new Weight(2.0, WeightUnit.KILOGRAM)
+        );
+
+        demonstrateWeightAddition(
+        new Weight(1.0, WeightUnit.KILOGRAM),
+        new Weight(1000.0, WeightUnit.GRAM)
+        );
+
+        demonstrateWeightAddition(
+        new Weight(500.0, WeightUnit.GRAM),
+        new Weight(0.5, WeightUnit.KILOGRAM)
+        );
+
+        demonstrateWeightAddition(
+        new Weight(1.0, WeightUnit.KILOGRAM),
+        new Weight(1000.0, WeightUnit.GRAM),
+        WeightUnit.GRAM
+        );
+
+        demonstrateWeightAddition(
+        new Weight(1.0, WeightUnit.POUND),
+        new Weight(453.592, WeightUnit.GRAM),
+        WeightUnit.POUND
+        );
+
+        demonstrateWeightAddition(
+        new Weight(2.0, WeightUnit.KILOGRAM),
+        new Weight(4.0, WeightUnit.POUND),
+        WeightUnit.KILOGRAM
         );
     }
 }
