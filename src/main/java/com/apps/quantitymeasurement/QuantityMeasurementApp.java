@@ -2,429 +2,63 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-    public static void demonstrateLengthEquality(
-            double value1,
-            LengthUnit unit1,
-            double value2,
-            LengthUnit unit2
-    ) {
-
-        Length length1 = new Length(value1, unit1);
-        Length length2 = new Length(value2, unit2);
-
-        System.out.println(
-                value1 + " " + unit1 +
-                " and " +
-                value2 + " " + unit2 +
-                " are equal: " +
-                length1.equals(length2)
-        );
-    }
-
-    // Method to demonstrate comparison feature
-    public static void demonstrateLengthComparison(
-            double value1,
-            LengthUnit unit1,
-            double value2,
-            LengthUnit unit2
-    ) {
-
-        demonstrateLengthEquality(
-                value1,
-                unit1,
-                value2,
-                unit2
-        );
-    }
-
-    // Generic method to demonstrate conversion
-    public static Length demonstrateLengthConversion(
-            double value,
-            LengthUnit fromUnit,
-            LengthUnit toUnit
-    ) {
-
-        Length originalLength =
-                new Length(value, fromUnit);
-
-        Length convertedLength =
-                originalLength.convertTo(toUnit);
-
-        System.out.println(
-                "Converted " +
-                value + " " + fromUnit +
-                " to " +
-                convertedLength.getValue() +
-                " " +
-                convertedLength.getUnit()
-        );
-
-        return convertedLength;
-    }
-
-    // Overloaded method
-    public static Length demonstrateLengthConversion(
-            Length length,
-            LengthUnit toUnit
-    ) {
-
-        Length convertedLength =
-                length.convertTo(toUnit);
-
-        System.out.println(
-                "Converted " +
-                length +
-                " to " +
-                convertedLength
-        );
-
-        return convertedLength;
-    }
-
-    // UC6
-    public static Length demonstrateLengthAddition(
-            Length length1,
-            Length length2
-    ) {
-
-        Length result =
-                length1.add(length2);
-
-        System.out.println(
-                "Addition Result : " + result
-        );
-
-        return result;
-    }
-
-    // UC7
-    public static Length demonstrateLengthAddition(
-            Length length1,
-            Length length2,
-            LengthUnit targetUnit
-    ) {
-
-        Length result =
-                length1.add(length2, targetUnit);
-
-        System.out.println(
-                "Addition Result : " + result
-        );
-
-        return result;
-    }
-    // Weight equality
-public static boolean demonstrateWeightEquality(
-        Weight weight1,
-        Weight weight2) {
-
-    boolean result = weight1.equals(weight2);
-
-    System.out.println(result);
-
-    return result;
-}
-
-// Weight conversion
-public static Weight demonstrateWeightConversion(
-        Weight weight,
-        WeightUnit targetUnit) {
-
-    Weight result = weight.convertTo(targetUnit);
-
-    System.out.println(result);
-
-    return result;
-}
-
-// Weight addition
-public static Weight demonstrateWeightAddition(
-        Weight weight1,
-        Weight weight2) {
-
-    Weight result = weight1.add(weight2);
-
-    System.out.println(result);
-
-    return result;
-}
-
-// Weight addition with target unit
-public static Weight demonstrateWeightAddition(
-        Weight weight1,
-        Weight weight2,
-        WeightUnit targetUnit) {
-
-    Weight result =
-            weight1.add(weight2, targetUnit);
-
-    System.out.println(result);
-
-    return result;
-}
-
-    public static void main(String[] args) {
-
         // Equality
+        public static <U extends IMeasurable> boolean demonstrateEquality(
+                        Quantity<U> quantity1,
+                        Quantity<U> quantity2) {
 
-        demonstrateLengthEquality(
-                1.0,
-                LengthUnit.FEET,
-                12.0,
-                LengthUnit.INCHES
-        );
-
-        demonstrateLengthEquality(
-                1.0,
-                LengthUnit.YARDS,
-                3.0,
-                LengthUnit.FEET
-        );
-
-        demonstrateLengthEquality(
-                1.0,
-                LengthUnit.YARDS,
-                36.0,
-                LengthUnit.INCHES
-        );
-
-        demonstrateLengthEquality(
-                1.0,
-                LengthUnit.CENTIMETERS,
-                0.393701,
-                LengthUnit.INCHES
-        );
-
-        demonstrateLengthEquality(
-                30.48,
-                LengthUnit.CENTIMETERS,
-                1.0,
-                LengthUnit.FEET
-        );
-
-        // Comparison
-
-        demonstrateLengthComparison(
-                1.0,
-                LengthUnit.FEET,
-                12.0,
-                LengthUnit.INCHES
-        );
-
-        demonstrateLengthComparison(
-                1.0,
-                LengthUnit.YARDS,
-                3.0,
-                LengthUnit.FEET
-        );
-
-        demonstrateLengthComparison(
-                1.0,
-                LengthUnit.YARDS,
-                36.0,
-                LengthUnit.INCHES
-        );
-
-        demonstrateLengthComparison(
-                30.48,
-                LengthUnit.CENTIMETERS,
-                1.0,
-                LengthUnit.FEET
-        );
+                return quantity1.equals(quantity2);
+        }
 
         // Conversion
+        public static <U extends IMeasurable> Quantity<U> demonstrateConversion(
+                        Quantity<U> quantity,
+                        U targetUnit) {
 
-        demonstrateLengthConversion(
-                1.0,
-                LengthUnit.FEET,
-                LengthUnit.INCHES
-        );
+                return quantity.convertTo(targetUnit);
+        }
 
-        demonstrateLengthConversion(
-                24.0,
-                LengthUnit.INCHES,
-                LengthUnit.FEET
-        );
+        // Addition
+        public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
+                        Quantity<U> quantity1,
+                        Quantity<U> quantity2) {
 
-        demonstrateLengthConversion(
-                1.0,
-                LengthUnit.YARDS,
-                LengthUnit.INCHES
-        );
+                return quantity1.add(quantity2);
+        }
 
-        demonstrateLengthConversion(
-                72.0,
-                LengthUnit.INCHES,
-                LengthUnit.YARDS
-        );
+        // Addition with target unit
+        public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
+                        Quantity<U> quantity1,
+                        Quantity<U> quantity2,
+                        U targetUnit) {
 
-        demonstrateLengthConversion(
-                2.54,
-                LengthUnit.CENTIMETERS,
-                LengthUnit.INCHES
-        );
+                return quantity1.add(quantity2, targetUnit);
+        }
 
-        // Overloaded conversion
+        public static void main(String[] args) {
 
-        Length yard =
-                new Length(2.0, LengthUnit.YARDS);
+                // LENGTH OPERATIONS
 
-        demonstrateLengthConversion(
-                yard,
-                LengthUnit.INCHES
-        );
+                Quantity<LengthUnit> lengthFeet = new Quantity<>(1.0, LengthUnit.FEET);
+                Quantity<LengthUnit> lengthInches = new Quantity<>(12.0, LengthUnit.INCHES);
+                System.out.println("Length Equality: " + demonstrateEquality(lengthFeet, lengthInches));
+                System.out.println("Length Conversion: " + demonstrateConversion(lengthFeet, LengthUnit.INCHES));
+                System.out.println(
+                                "Length Addition: " + demonstrateAddition(lengthFeet, lengthInches, LengthUnit.FEET));
 
-        // UC6 Addition
+                // WEIGHT OPERATIONS
 
-        demonstrateLengthAddition(
-                new Length(1.0, LengthUnit.FEET),
-                new Length(2.0, LengthUnit.FEET)
-        );
+                Quantity<WeightUnit> weightKg = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+                Quantity<WeightUnit> weightGram = new Quantity<>(1000.0, WeightUnit.GRAM);
+                System.out.println("Weight Equality: " + demonstrateEquality(weightKg, weightGram));
+                System.out.println("Weight Conversion: " + demonstrateConversion(weightKg, WeightUnit.GRAM));
+                System.out.println(
+                                "Weight Addition: " + demonstrateAddition(weightKg, weightGram, WeightUnit.KILOGRAM));
 
-        demonstrateLengthAddition(
-                new Length(1.0, LengthUnit.FEET),
-                new Length(12.0, LengthUnit.INCHES)
-        );
+                // CROSS CATEGORY CHECK
 
-        demonstrateLengthAddition(
-                new Length(12.0, LengthUnit.INCHES),
-                new Length(1.0, LengthUnit.FEET)
-        );
-
-        demonstrateLengthAddition(
-                new Length(1.0, LengthUnit.YARDS),
-                new Length(3.0, LengthUnit.FEET)
-        );
-
-        demonstrateLengthAddition(
-                new Length(36.0, LengthUnit.INCHES),
-                new Length(1.0, LengthUnit.YARDS)
-        );
-
-        demonstrateLengthAddition(
-                new Length(2.54, LengthUnit.CENTIMETERS),
-                new Length(1.0, LengthUnit.INCHES)
-        );
-
-        demonstrateLengthAddition(
-                new Length(5.0, LengthUnit.FEET),
-                new Length(0.0, LengthUnit.INCHES)
-        );
-
-        demonstrateLengthAddition(
-                new Length(5.0, LengthUnit.FEET),
-                new Length(-2.0, LengthUnit.FEET)
-        );
-
-        // UC7 Addition with target unit
-
-        demonstrateLengthAddition(
-                new Length(1.0, LengthUnit.FEET),
-                new Length(12.0, LengthUnit.INCHES),
-                LengthUnit.FEET
-        );
-
-        demonstrateLengthAddition(
-                new Length(1.0, LengthUnit.FEET),
-                new Length(12.0, LengthUnit.INCHES),
-                LengthUnit.INCHES
-        );
-
-        demonstrateLengthAddition(
-                new Length(1.0, LengthUnit.FEET),
-                new Length(12.0, LengthUnit.INCHES),
-                LengthUnit.YARDS
-        );
-
-        demonstrateLengthAddition(
-                new Length(2.54, LengthUnit.CENTIMETERS),
-                new Length(1.0, LengthUnit.INCHES),
-                LengthUnit.CENTIMETERS
-        );
-
-
-        //uc9
-        demonstrateWeightEquality(
-        new Weight(1.0, WeightUnit.KILOGRAM),
-        new Weight(1.0, WeightUnit.KILOGRAM)
-       );
-
-        demonstrateWeightEquality(
-        new Weight(1.0, WeightUnit.KILOGRAM),
-        new Weight(1000.0, WeightUnit.GRAM)
-        );
-
-        demonstrateWeightEquality(
-        new Weight(2.0, WeightUnit.POUND),
-        new Weight(2.0, WeightUnit.POUND)
-        );
-
-        demonstrateWeightEquality(
-        new Weight(1.0, WeightUnit.KILOGRAM),
-        new Weight(2.20462, WeightUnit.POUND)
-        );
-
-        demonstrateWeightEquality(
-        new Weight(500.0, WeightUnit.GRAM),
-        new Weight(0.5, WeightUnit.KILOGRAM)
-        );
-
-        demonstrateWeightEquality(
-        new Weight(1.0, WeightUnit.POUND),
-        new Weight(453.592, WeightUnit.GRAM)
-        );
-
-        demonstrateWeightConversion(
-        new Weight(1.0, WeightUnit.KILOGRAM),
-        WeightUnit.GRAM
-        );
-
-        demonstrateWeightConversion(
-        new Weight(2.0, WeightUnit.POUND),
-        WeightUnit.KILOGRAM
-        );
-
-        demonstrateWeightConversion(
-        new Weight(500.0, WeightUnit.GRAM),
-        WeightUnit.POUND
-        );
-
-        demonstrateWeightConversion(
-        new Weight(0.0, WeightUnit.KILOGRAM),
-        WeightUnit.GRAM
-        );
-
-        demonstrateWeightAddition(
-        new Weight(1.0, WeightUnit.KILOGRAM),
-        new Weight(2.0, WeightUnit.KILOGRAM)
-        );
-
-        demonstrateWeightAddition(
-        new Weight(1.0, WeightUnit.KILOGRAM),
-        new Weight(1000.0, WeightUnit.GRAM)
-        );
-
-        demonstrateWeightAddition(
-        new Weight(500.0, WeightUnit.GRAM),
-        new Weight(0.5, WeightUnit.KILOGRAM)
-        );
-
-        demonstrateWeightAddition(
-        new Weight(1.0, WeightUnit.KILOGRAM),
-        new Weight(1000.0, WeightUnit.GRAM),
-        WeightUnit.GRAM
-        );
-
-        demonstrateWeightAddition(
-        new Weight(1.0, WeightUnit.POUND),
-        new Weight(453.592, WeightUnit.GRAM),
-        WeightUnit.POUND
-        );
-
-        demonstrateWeightAddition(
-        new Weight(2.0, WeightUnit.KILOGRAM),
-        new Weight(4.0, WeightUnit.POUND),
-        WeightUnit.KILOGRAM
-        );
-    }
+                Quantity<?> length = new Quantity<>(1.0, LengthUnit.FEET);
+                Quantity<?> weight = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+                System.out.println("Cross Category Equality: " + length.equals(weight));
+        }
 }
