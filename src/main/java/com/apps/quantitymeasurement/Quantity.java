@@ -59,8 +59,7 @@ public class Quantity<U extends IMeasurable> {
         double finalValue =
                 unit.convertFromBaseUnit(sumBase);
 
-        finalValue =
-                Math.round(finalValue * 100.0) / 100.0;
+        
 
         return new Quantity<>(finalValue, unit);
     }
@@ -82,8 +81,8 @@ public class Quantity<U extends IMeasurable> {
         double finalValue =
                 targetUnit.convertFromBaseUnit(sumBase);
 
-        finalValue =
-                Math.round(finalValue * 100.0) / 100.0;
+        
+                
 
         return new Quantity<>(finalValue, targetUnit);
     }
@@ -115,7 +114,7 @@ public class Quantity<U extends IMeasurable> {
         double otherBase =
                 other.unit.convertToBaseUnit(other.value);
 
-        return Double.compare(thisBase, otherBase) == 0;
+        return Math.abs(thisBase - otherBase) < 0.01;
     }
 
     @Override

@@ -60,5 +60,13 @@ public class QuantityMeasurementApp {
                 Quantity<?> length = new Quantity<>(1.0, LengthUnit.FEET);
                 Quantity<?> weight = new Quantity<>(1.0, WeightUnit.KILOGRAM);
                 System.out.println("Cross Category Equality: " + length.equals(weight));
-        }
+        
+                Quantity<VolumeUnit> litre =new Quantity<>(1.0, VolumeUnit.LITRE);
+                Quantity<VolumeUnit> milliLitre =new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+                Quantity<VolumeUnit> gallon =new Quantity<>(1.0, VolumeUnit.GALLON);
+                System.out.println(litre.equals(milliLitre));
+                System.out.println(litre.convertTo(VolumeUnit.MILLILITRE));
+                System.out.println(litre.add(milliLitre,VolumeUnit.LITRE));
+        
+}
 }
