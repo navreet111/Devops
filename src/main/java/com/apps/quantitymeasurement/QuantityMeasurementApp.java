@@ -35,6 +35,30 @@ public class QuantityMeasurementApp {
                 return quantity1.add(quantity2, targetUnit);
         }
 
+        public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
+                        Quantity<U> quantity1,
+                        Quantity<U> quantity2) {
+
+                return quantity1.subtract(quantity2);
+        }
+
+        public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
+                        Quantity<U> quantity1,
+                        Quantity<U> quantity2,
+                        U targetUnit) {
+
+                return quantity1.subtract(
+                                quantity2,
+                                targetUnit);
+        }
+
+        public static <U extends IMeasurable> double demonstrateDivision(
+                        Quantity<U> quantity1,
+                        Quantity<U> quantity2) {
+
+                return quantity1.divide(quantity2);
+        }
+
         public static void main(String[] args) {
 
                 // LENGTH OPERATIONS
@@ -43,8 +67,7 @@ public class QuantityMeasurementApp {
                 Quantity<LengthUnit> lengthInches = new Quantity<>(12.0, LengthUnit.INCHES);
                 System.out.println("Length Equality: " + demonstrateEquality(lengthFeet, lengthInches));
                 System.out.println("Length Conversion: " + demonstrateConversion(lengthFeet, LengthUnit.INCHES));
-                System.out.println(
-                                "Length Addition: " + demonstrateAddition(lengthFeet, lengthInches, LengthUnit.FEET));
+                System.out.println("Length Addition: " + demonstrateAddition(lengthFeet, lengthInches, LengthUnit.FEET));
 
                 // WEIGHT OPERATIONS
 
@@ -52,21 +75,43 @@ public class QuantityMeasurementApp {
                 Quantity<WeightUnit> weightGram = new Quantity<>(1000.0, WeightUnit.GRAM);
                 System.out.println("Weight Equality: " + demonstrateEquality(weightKg, weightGram));
                 System.out.println("Weight Conversion: " + demonstrateConversion(weightKg, WeightUnit.GRAM));
-                System.out.println(
-                                "Weight Addition: " + demonstrateAddition(weightKg, weightGram, WeightUnit.KILOGRAM));
+                System.out.println("Weight Addition: " + demonstrateAddition(weightKg, weightGram, WeightUnit.KILOGRAM));
 
                 // CROSS CATEGORY CHECK
 
                 Quantity<?> length = new Quantity<>(1.0, LengthUnit.FEET);
                 Quantity<?> weight = new Quantity<>(1.0, WeightUnit.KILOGRAM);
                 System.out.println("Cross Category Equality: " + length.equals(weight));
-        
-                Quantity<VolumeUnit> litre =new Quantity<>(1.0, VolumeUnit.LITRE);
-                Quantity<VolumeUnit> milliLitre =new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-                Quantity<VolumeUnit> gallon =new Quantity<>(1.0, VolumeUnit.GALLON);
+
+                Quantity<VolumeUnit> litre = new Quantity<>(1.0, VolumeUnit.LITRE);
+                Quantity<VolumeUnit> milliLitre = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+                Quantity<VolumeUnit> gallon = new Quantity<>(1.0, VolumeUnit.GALLON);
                 System.out.println(litre.equals(milliLitre));
                 System.out.println(litre.convertTo(VolumeUnit.MILLILITRE));
-                System.out.println(litre.add(milliLitre,VolumeUnit.LITRE));
-        
-}
+                System.out.println(litre.add(milliLitre, VolumeUnit.LITRE));
+                Quantity<LengthUnit> feet = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> inches = new Quantity<>(6.0, LengthUnit.INCHES);
+
+                System.out.println(demonstrateSubtraction(feet, inches));
+
+                System.out.println(demonstrateSubtraction(feet,inches,LengthUnit.INCHES));
+
+                System.out.println(demonstrateDivision(feet,new Quantity<>(2.0,LengthUnit.FEET)));
+                Quantity<WeightUnit> kg = new Quantity<>(10.0,WeightUnit.KILOGRAM);
+
+                Quantity<WeightUnit> gram = new Quantity<>(5000.0,WeightUnit.GRAM);
+
+                System.out.println(demonstrateSubtraction(kg,gram));
+
+                System.out.println(demonstrateDivision(kg,new Quantity<>(5.0,WeightUnit.KILOGRAM)));
+                Quantity<VolumeUnit> litres = new Quantity<>(5.0,VolumeUnit.LITRE);
+
+                Quantity<VolumeUnit> ml = new Quantity<>(500.0,VolumeUnit.MILLILITRE);
+
+                System.out.println(demonstrateSubtraction(litres,ml));
+
+                System.out.println(demonstrateDivision( litres, new Quantity<>(10.0,VolumeUnit.LITRE)));
+
+        }
 }

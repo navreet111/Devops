@@ -86,7 +86,78 @@ public class Quantity<U extends IMeasurable> {
 
         return new Quantity<>(finalValue, targetUnit);
     }
+     public Quantity<U> subtract(Quantity<U> other) {
 
+    if (other == null) {
+        throw new IllegalArgumentException("Quantity cannot be null");
+    }
+
+    if (!unit.getClass().equals(other.unit.getClass())) {
+        throw new IllegalArgumentException("Incompatible units");
+    }
+
+    double thisBase = unit.convertToBaseUnit(value);
+    double otherBase = other.unit.convertToBaseUnit(other.value);
+
+    double resultBase = thisBase - otherBase;
+
+    double result =
+            unit.convertFromBaseUnit(resultBase);
+
+    result = Math.round(result * 100.0) / 100.0;
+
+    return new Quantity<>(result, unit);
+}
+public Quantity<U> subtract(
+        Quantity<U> other,
+        U targetUnit) {
+
+    if (other == null) {
+        throw new IllegalArgumentException("Quantity cannot be null");
+    }
+
+    if (targetUnit == null) {
+        throw new IllegalArgumentException("Target unit cannot be null");
+    }
+
+    if (!unit.getClass().equals(other.unit.getClass())) {
+        throw new IllegalArgumentException("Incompatible units");
+    }
+
+    double thisBase = unit.convertToBaseUnit(value);
+    double otherBase = other.unit.convertToBaseUnit(other.value);
+
+    double resultBase = thisBase - otherBase;
+
+    double result =
+            targetUnit.convertFromBaseUnit(resultBase);
+
+    result = Math.round(result * 100.0) / 100.0;
+
+    return new Quantity<>(result, targetUnit);
+}
+public double divide(Quantity<U> other) {
+
+    if (other == null) {
+        throw new IllegalArgumentException("Quantity cannot be null");
+    }
+
+    if (!unit.getClass().equals(other.unit.getClass())) {
+        throw new IllegalArgumentException("Incompatible units");
+    }
+
+    double divisor =
+            other.unit.convertToBaseUnit(other.value);
+
+    if (divisor == 0.0) {
+        throw new ArithmeticException("Division by zero");
+    }
+
+    double dividend =
+            unit.convertToBaseUnit(value);
+
+    return dividend / divisor;
+}
     @Override
     public boolean equals(Object obj) {
 
