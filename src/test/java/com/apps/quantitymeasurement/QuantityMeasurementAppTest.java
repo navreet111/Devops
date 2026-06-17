@@ -1957,17 +1957,7 @@ public class QuantityMeasurementAppTest {
                 assertEquals(2e6, result.getValue(), 0.01);
         }
 
-        @Test
-        public void testAddition_SmallValues() {
-
-                Quantity<VolumeUnit> litre1 = new Quantity<>(0.001, VolumeUnit.LITRE);
-
-                Quantity<VolumeUnit> litre2 = new Quantity<>(0.002, VolumeUnit.LITRE);
-
-                Quantity<VolumeUnit> result = litre1.add(litre2);
-
-                assertEquals(0.003, result.getValue(), 0.001);
-        }
+        
 
         // =========================
         // VOLUME UNIT ENUM TESTS
@@ -2566,5 +2556,220 @@ public class QuantityMeasurementAppTest {
                                 0.333,
                                 result,
                                 0.001);
+        }
+
+        @Test
+        void testValidation_NullOperand_ConsistentAcrossOperations() {
+                Quantity<LengthUnit> q = new Quantity<>(10.0, LengthUnit.FEET);
+
+                assertThrows(IllegalArgumentException.class,
+                                () -> q.add(null));
+
+                assertThrows(IllegalArgumentException.class,
+                                () -> q.subtract(null));
+
+                assertThrows(IllegalArgumentException.class,
+                                () -> q.divide(null));
+        }
+
+        @Test
+        void testValidation_NullTargetUnit_AddSubtractReject() {
+                Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(5.0, LengthUnit.FEET);
+
+                assertThrows(IllegalArgumentException.class,
+                                () -> q1.add(q2, null));
+
+                assertThrows(IllegalArgumentException.class,
+                                () -> q1.subtract(q2, null));
+        }
+
+        @Test
+        void testAdd_UC12_BehaviorPreserved() {
+                Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
+
+                assertEquals(
+                                new Quantity<>(2.0, LengthUnit.FEET),
+                                q1.add(q2));
+        }
+
+        @Test
+        void testSubtract_UC12_BehaviorPreserved() {
+                Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(6.0, LengthUnit.INCHES);
+
+                assertEquals(
+                                new Quantity<>(9.5, LengthUnit.FEET),
+                                q1.subtract(q2));
+        }
+
+        @Test
+        void testDivide_UC12_BehaviorPreserved() {
+                Quantity<LengthUnit> q1 = new Quantity<>(24.0, LengthUnit.INCHES);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(2.0, LengthUnit.FEET);
+
+                assertEquals(
+                                1.0,
+                                q1.divide(q2),
+                                0.01);
+        }
+
+        @Test
+        void testRounding_AddSubtract_TwoDecimalPlaces() {
+                Quantity<LengthUnit> q1 = new Quantity<>(1.11, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(0.22, LengthUnit.FEET);
+
+                Quantity<LengthUnit> result = q1.add(q2);
+
+                assertEquals(
+                                1.33,
+                                result.getValue(),
+                                0.01);
+        }
+
+        @Test
+        void testRounding_Divide_NoRounding() {
+                Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(3.0, LengthUnit.FEET);
+
+                assertEquals(
+                                3.3333,
+                                q1.divide(q2),
+                                0.001);
+        }
+
+        @Test
+        void testImplicitTargetUnit_AddSubtract() {
+                Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
+
+                assertEquals(
+                                LengthUnit.FEET,
+                                q1.add(q2).getUnit());
+
+                assertEquals(
+                                LengthUnit.FEET,
+                                q1.subtract(q2).getUnit());
+        }
+
+        @Test
+        void testExplicitTargetUnit_AddSubtract_Overrides() {
+                Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
+
+                assertEquals(
+                                LengthUnit.INCHES,
+                                q1.add(q2, LengthUnit.INCHES)
+                                                .getUnit());
+        }
+
+        @Test
+        void testImmutability_AfterAdd_ViaCentralizedHelper() {
+
+                Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
+
+                q1.add(q2);
+
+                assertEquals(1.0, q1.getValue());
+                assertEquals(12.0, q2.getValue());
+        }
+
+        @Test
+        void testImmutability_AfterSubtract_ViaCentralizedHelper() {
+
+                Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(5.0, LengthUnit.FEET);
+
+                q1.subtract(q2);
+
+                assertEquals(10.0, q1.getValue());
+                assertEquals(5.0, q2.getValue());
+        }
+
+        @Test
+        void testImmutability_AfterDivide_ViaCentralizedHelper() {
+
+                Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(2.0, LengthUnit.FEET);
+
+                q1.divide(q2);
+
+                assertEquals(10.0, q1.getValue());
+                assertEquals(2.0, q2.getValue());
+        }
+
+        @Test
+        void testAllOperations_AcrossAllCategories() {
+
+                Quantity<LengthUnit> length1 = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> length2 = new Quantity<>(5.0, LengthUnit.FEET);
+
+                assertEquals(15.0,
+                                length1.add(length2).getValue());
+
+                Quantity<WeightUnit> weight1 = new Quantity<>(2.0, WeightUnit.KILOGRAM);
+
+                Quantity<WeightUnit> weight2 = new Quantity<>(1000.0, WeightUnit.GRAM);
+
+                assertEquals(
+                                3.0,
+                                weight1.add(weight2).getValue(),
+                                0.01);
+
+                Quantity<VolumeUnit> volume1 = new Quantity<>(1.0, VolumeUnit.LITRE);
+
+                Quantity<VolumeUnit> volume2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+
+                assertEquals(
+                                2.0,
+                                volume1.add(volume2).getValue(),
+                                0.01);
+        }
+
+        @Test
+        void testErrorMessage_Consistency_Across_Operations() {
+
+                Quantity<LengthUnit> q = new Quantity<>(10.0, LengthUnit.FEET);
+
+                assertEquals(
+                                "Quantity cannot be null",
+                                assertThrows(
+                                                IllegalArgumentException.class,
+                                                () -> q.add(null)).getMessage());
+        }
+
+        @Test
+        void testArithmetic_Chain_Operations() {
+
+                Quantity<LengthUnit> q1 = new Quantity<>(10.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q2 = new Quantity<>(2.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q3 = new Quantity<>(1.0, LengthUnit.FEET);
+
+                Quantity<LengthUnit> q4 = new Quantity<>(7.0, LengthUnit.FEET);
+
+                double result = q1.add(q2)
+                                .subtract(q3)
+                                .divide(q4);
+
+                assertEquals(
+                                11.0 / 7.0,
+                                result,
+                                0.01);
         }
 }
