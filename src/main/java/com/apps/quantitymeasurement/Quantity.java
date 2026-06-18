@@ -65,11 +65,18 @@ private double performArithmetic(
         Quantity<U> other,
         ArithmeticOperation operation) {
 
+    unit.validateOperationSupport(
+            operation.name());
+
+    other.unit.validateOperationSupport(
+            operation.name());
+
     double thisBase =
             unit.convertToBaseUnit(value);
 
     double otherBase =
-            other.unit.convertToBaseUnit(other.value);
+            other.unit.convertToBaseUnit(
+                    other.value);
 
     return operation.compute(
             thisBase,
@@ -99,20 +106,24 @@ private double performArithmetic(
     }
 
     // Convert quantity to target unit
-    public Quantity<U> convertTo(U targetUnit) {
+   public Quantity<U> convertTo(U targetUnit) {
 
-        double baseValue =
-                unit.convertToBaseUnit(value);
-
-        double convertedValue =
-                targetUnit.convertFromBaseUnit(baseValue);
-
-        convertedValue =
-                Math.round(convertedValue * 100.0) / 100.0;
-
-        return new Quantity<>(convertedValue, targetUnit);
+    if (targetUnit == null) {
+        throw new IllegalArgumentException(
+                "Target unit cannot be null");
     }
 
+    double baseValue =
+            unit.convertToBaseUnit(value);
+
+    double convertedValue =
+            targetUnit.convertFromBaseUnit(baseValue);
+
+    convertedValue =
+            Math.round(convertedValue * 100.0) / 100.0;
+
+    return new Quantity<>(convertedValue, targetUnit);
+}
     // Add quantities and return result in first quantity unit
     // public Quantity<U> add(Quantity<U> other) {
 
@@ -324,7 +335,9 @@ public double divide(Quantity<U> other) {
         double baseValue =
                 unit.convertToBaseUnit(value);
 
-        return Objects.hash(baseValue);
+       return Objects.hash(
+        baseValue,
+        unit.getClass());
     }
 
     @Override
