@@ -1,24 +1,35 @@
 package com.apps.quantitymeasurement.app;
 
 import com.apps.quantitymeasurement.controller.QuantityMeasurementController;
+import com.apps.quantitymeasurement.factory.RepositoryFactory;
 import com.apps.quantitymeasurement.model.QuantityDTO;
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
-import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
 import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
 import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
 
+import java.util.logging.Logger;
+
 public class QuantityMeasurementApp {
+
+    private static final Logger logger =
+            Logger.getLogger(
+                    QuantityMeasurementApp.class.getName());
 
     public static void main(String[] args) {
 
         IQuantityMeasurementRepository repository =
-                QuantityMeasurementCacheRepository.getInstance();
+                RepositoryFactory.getRepository();
+        logger.info(
+                "Repository Selected : "
+                        + repository.getClass().getSimpleName());
 
         IQuantityMeasurementService service =
-                new QuantityMeasurementServiceImpl(repository);
+                new QuantityMeasurementServiceImpl(
+                        repository);
 
         QuantityMeasurementController controller =
-                new QuantityMeasurementController(service);
+                new QuantityMeasurementController(
+                        service);
 
         // ================= LENGTH =================
 
@@ -34,33 +45,31 @@ public class QuantityMeasurementApp {
                         "INCHES",
                         "LENGTH");
 
-        System.out.println(
+        logger.info(
                 "1 FEET == 12 INCHES : "
                         + controller.performCompare(
                         feet,
                         inches));
 
-        System.out.println(
+        logger.info(
                 "1 FEET -> INCHES : "
                         + controller.performConvert(
-        feet,
-        new QuantityDTO(
-                0,
-                "INCHES",
-                "LENGTH"
-        )
-)
-);
+                        feet,
+                        new QuantityDTO(
+                                0,
+                                "INCHES",
+                                "LENGTH")));
 
-        System.out.println(
+        logger.info(
                 "1 FEET + 12 INCHES : "
                         + controller.performAdd(
                         feet,
                         inches));
 
-        System.out.println(
+        logger.info(
                 "10 FEET - 6 INCHES : "
                         + controller.performSubtract(
+
                         new QuantityDTO(
                                 10,
                                 "FEET",
@@ -71,9 +80,10 @@ public class QuantityMeasurementApp {
                                 "INCHES",
                                 "LENGTH")));
 
-        System.out.println(
+        logger.info(
                 "10 FEET / 2 FEET : "
                         + controller.performDivide(
+
                         new QuantityDTO(
                                 10,
                                 "FEET",
@@ -98,13 +108,13 @@ public class QuantityMeasurementApp {
                         "GRAM",
                         "WEIGHT");
 
-        System.out.println(
+        logger.info(
                 "1 KG == 1000 GRAM : "
                         + controller.performCompare(
                         kilogram,
                         gram));
 
-        System.out.println(
+        logger.info(
                 "1 KG + 1000 GRAM : "
                         + controller.performAdd(
                         kilogram,
@@ -124,13 +134,13 @@ public class QuantityMeasurementApp {
                         "MILLILITRE",
                         "VOLUME");
 
-        System.out.println(
+        logger.info(
                 "1 LITRE == 1000 ML : "
                         + controller.performCompare(
                         litre,
                         milliLitre));
 
-        System.out.println(
+        logger.info(
                 "1 LITRE + 1000 ML : "
                         + controller.performAdd(
                         litre,
@@ -150,23 +160,22 @@ public class QuantityMeasurementApp {
                         "FAHRENHEIT",
                         "TEMPERATURE");
 
-        System.out.println(
+        logger.info(
                 "0 C == 32 F : "
                         + controller.performCompare(
                         celsius,
                         fahrenheit));
 
-        System.out.println(
+        logger.info(
                 "0 C -> KELVIN : "
                         + controller.performConvert(
-        celsius,
-        new QuantityDTO(
-                0,
-                "KELVIN",
-                "TEMPERATURE"
-        )
-)
-);
+
+                        celsius,
+
+                        new QuantityDTO(
+                                0,
+                                "KELVIN",
+                                "TEMPERATURE")));
 
         try {
 
@@ -177,7 +186,7 @@ public class QuantityMeasurementApp {
         } catch (
                 UnsupportedOperationException e) {
 
-            System.out.println(
+            logger.severe(
                     e.getMessage());
         }
 
@@ -190,7 +199,7 @@ public class QuantityMeasurementApp {
         } catch (
                 UnsupportedOperationException e) {
 
-            System.out.println(
+            logger.severe(
                     e.getMessage());
         }
 
@@ -203,8 +212,13 @@ public class QuantityMeasurementApp {
         } catch (
                 UnsupportedOperationException e) {
 
-            System.out.println(
+            logger.severe(
                     e.getMessage());
         }
+
+        repository.releaseResources();
+
+        logger.info(
+                "Application Closed Successfully.");
     }
 }

@@ -1,20 +1,35 @@
 package com.apps.quantitymeasurement.service;
 
 import com.apps.quantitymeasurement.*;
-import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
 import com.apps.quantitymeasurement.model.QuantityDTO;
+import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+
+import java.util.logging.Logger;
 
 public class QuantityMeasurementServiceImpl
         implements IQuantityMeasurementService {
+
+    private static final Logger logger =
+            Logger.getLogger(
+                    QuantityMeasurementServiceImpl.class.getName());
 
     private final IQuantityMeasurementRepository repository;
 
     public QuantityMeasurementServiceImpl(
             IQuantityMeasurementRepository repository) {
 
+        if (repository == null) {
+            throw new IllegalArgumentException(
+                    "Repository cannot be null");
+        }
+
         this.repository = repository;
     }
+
+    // =====================================================
+    // Compare
+    // =====================================================
 
     @Override
     public boolean compare(
@@ -35,41 +50,50 @@ public class QuantityMeasurementServiceImpl
                         quantity1,
                         quantity2,
                         "COMPARE",
-                        result
-                )
-        );
+                        result));
+
+        logger.info(
+                "Comparison Successful");
 
         return result;
     }
+
+    // =====================================================
+    // Convert
+    // =====================================================
 
     @Override
     public QuantityDTO convert(
             QuantityDTO quantity,
             QuantityDTO targetUnit) {
 
-      Quantity<?> result =
-        performConversion(
-                quantity,
-                targetUnit);
+        Quantity<?> result =
+                performConversion(
+                        quantity,
+                        targetUnit);
 
         QuantityDTO dto =
                 new QuantityDTO(
                         result.getValue(),
                         result.getUnit().getUnitName(),
-                        targetUnit.getMeasurementType()
-                );
+                        targetUnit.getMeasurementType());
 
         repository.save(
                 new QuantityMeasurementEntity(
                         quantity,
                         targetUnit,
                         "CONVERT",
-                        dto
-                )
-        );
+                        dto));
+
+        logger.info(
+                "Conversion Successful");
 
         return dto;
     }
+
+    // =====================================================
+    // Addition
+    // =====================================================
 
     @Override
     public QuantityDTO add(
@@ -89,17 +113,17 @@ public class QuantityMeasurementServiceImpl
                 new QuantityDTO(
                         result.getValue(),
                         result.getUnit().getUnitName(),
-                        quantity1.getMeasurementType()
-                );
+                        quantity1.getMeasurementType());
 
         repository.save(
                 new QuantityMeasurementEntity(
                         quantity1,
                         quantity2,
                         "ADD",
-                        dto
-                )
-        );
+                        dto));
+
+        logger.info(
+                "Addition Successful");
 
         return dto;
     }
@@ -119,15 +143,29 @@ public class QuantityMeasurementServiceImpl
         Quantity result =
                 q1.add(
                         q2,
-                        getUnit(targetUnit)
-                );
+                        getUnit(targetUnit));
 
-        return new QuantityDTO(
-                result.getValue(),
-                result.getUnit().getUnitName(),
-                targetUnit.getMeasurementType()
-        );
+        QuantityDTO dto =
+                new QuantityDTO(
+                        result.getValue(),
+                        result.getUnit().getUnitName(),
+                        targetUnit.getMeasurementType());
+
+        repository.save(
+                new QuantityMeasurementEntity(
+                        quantity1,
+                        quantity2,
+                        "ADD",
+                        dto));
+
+        logger.info(
+                "Addition Successful");
+
+        return dto;
     }
+    // =====================================================
+    // Subtraction
+    // =====================================================
 
     @Override
     public QuantityDTO subtract(
@@ -143,11 +181,23 @@ public class QuantityMeasurementServiceImpl
         Quantity result =
                 q1.subtract(q2);
 
-        return new QuantityDTO(
-                result.getValue(),
-                result.getUnit().getUnitName(),
-                quantity1.getMeasurementType()
-        );
+        QuantityDTO dto =
+                new QuantityDTO(
+                        result.getValue(),
+                        result.getUnit().getUnitName(),
+                        quantity1.getMeasurementType());
+
+        repository.save(
+                new QuantityMeasurementEntity(
+                        quantity1,
+                        quantity2,
+                        "SUBTRACT",
+                        dto));
+
+        logger.info(
+                "Subtraction Successful");
+
+        return dto;
     }
 
     @Override
@@ -165,15 +215,30 @@ public class QuantityMeasurementServiceImpl
         Quantity result =
                 q1.subtract(
                         q2,
-                        getUnit(targetUnit)
-                );
+                        getUnit(targetUnit));
 
-        return new QuantityDTO(
-                result.getValue(),
-                result.getUnit().getUnitName(),
-                targetUnit.getMeasurementType()
-        );
+        QuantityDTO dto =
+                new QuantityDTO(
+                        result.getValue(),
+                        result.getUnit().getUnitName(),
+                        targetUnit.getMeasurementType());
+
+        repository.save(
+                new QuantityMeasurementEntity(
+                        quantity1,
+                        quantity2,
+                        "SUBTRACT",
+                        dto));
+
+        logger.info(
+                "Subtraction Successful");
+
+        return dto;
     }
+
+    // =====================================================
+    // Division
+    // =====================================================
 
     @Override
     public double divide(
@@ -194,60 +259,55 @@ public class QuantityMeasurementServiceImpl
                         quantity1,
                         quantity2,
                         "DIVIDE",
-                        result
-                )
-        );
+                        result));
+
+        logger.info(
+                "Division Successful");
 
         return result;
     }
 
-    // ===========================
+    // =====================================================
     // Helper Methods
-    // ===========================
+    // =====================================================
 
     private Quantity<?> createQuantity(
             QuantityDTO dto) {
 
         switch (
-                dto.getMeasurementType()
-                        .toUpperCase()) {
+                dto.getMeasurementType().toUpperCase()) {
 
             case "LENGTH":
                 return new Quantity<>(
                         dto.getValue(),
                         LengthUnit.valueOf(
-                                dto.getUnit()
-                        )
-                );
+                                dto.getUnit()));
 
             case "WEIGHT":
                 return new Quantity<>(
                         dto.getValue(),
                         WeightUnit.valueOf(
-                                dto.getUnit()
-                        )
-                );
+                                dto.getUnit()));
 
             case "VOLUME":
                 return new Quantity<>(
                         dto.getValue(),
                         VolumeUnit.valueOf(
-                                dto.getUnit()
-                        )
-                );
+                                dto.getUnit()));
 
             case "TEMPERATURE":
                 return new Quantity<>(
                         dto.getValue(),
                         TemperatureUnit.valueOf(
-                                dto.getUnit()
-                        )
-                );
+                                dto.getUnit()));
 
             default:
+
+                logger.severe(
+                        "Unsupported Measurement Type");
+
                 throw new IllegalArgumentException(
-                        "Unsupported Measurement Type"
-                );
+                        "Unsupported Measurement Type");
         }
     }
 
@@ -255,83 +315,88 @@ public class QuantityMeasurementServiceImpl
             QuantityDTO dto) {
 
         switch (
-                dto.getMeasurementType()
-                        .toUpperCase()) {
+                dto.getMeasurementType().toUpperCase()) {
 
             case "LENGTH":
                 return LengthUnit.valueOf(
-                        dto.getUnit()
-                );
+                        dto.getUnit());
 
             case "WEIGHT":
                 return WeightUnit.valueOf(
-                        dto.getUnit()
-                );
+                        dto.getUnit());
 
             case "VOLUME":
                 return VolumeUnit.valueOf(
-                        dto.getUnit()
-                );
+                        dto.getUnit());
 
             case "TEMPERATURE":
                 return TemperatureUnit.valueOf(
-                        dto.getUnit()
-                );
+                        dto.getUnit());
 
             default:
+
+                logger.severe(
+                        "Unsupported Measurement Type");
+
                 throw new IllegalArgumentException(
-                        "Unsupported Measurement Type"
-                );
+                        "Unsupported Measurement Type");
         }
     }
 
-   private Quantity<?> performConversion(
-        QuantityDTO source,
-        QuantityDTO target) {
+    private Quantity<?> performConversion(
+            QuantityDTO source,
+            QuantityDTO target) {
 
-    switch (
-            source.getMeasurementType()
-                    .toUpperCase()) {
+        switch (
+                source.getMeasurementType().toUpperCase()) {
 
-        case "LENGTH":
-            return new Quantity<>(
-                    source.getValue(),
-                    LengthUnit.valueOf(
-                            source.getUnit()))
-                    .convertTo(
-                            LengthUnit.valueOf(
-                                    target.getUnit()));
+            case "LENGTH":
 
-        case "WEIGHT":
-            return new Quantity<>(
-                    source.getValue(),
-                    WeightUnit.valueOf(
-                            source.getUnit()))
-                    .convertTo(
-                            WeightUnit.valueOf(
-                                    target.getUnit()));
+                return new Quantity<>(
+                        source.getValue(),
+                        LengthUnit.valueOf(
+                                source.getUnit()))
+                        .convertTo(
+                                LengthUnit.valueOf(
+                                        target.getUnit()));
 
-        case "VOLUME":
-            return new Quantity<>(
-                    source.getValue(),
-                    VolumeUnit.valueOf(
-                            source.getUnit()))
-                    .convertTo(
-                            VolumeUnit.valueOf(
-                                    target.getUnit()));
+            case "WEIGHT":
 
-        case "TEMPERATURE":
-            return new Quantity<>(
-                    source.getValue(),
-                    TemperatureUnit.valueOf(
-                            source.getUnit()))
-                    .convertTo(
-                            TemperatureUnit.valueOf(
-                                    target.getUnit()));
+                return new Quantity<>(
+                        source.getValue(),
+                        WeightUnit.valueOf(
+                                source.getUnit()))
+                        .convertTo(
+                                WeightUnit.valueOf(
+                                        target.getUnit()));
 
-        default:
-            throw new IllegalArgumentException(
-                    "Unsupported Measurement Type");
+            case "VOLUME":
+
+                return new Quantity<>(
+                        source.getValue(),
+                        VolumeUnit.valueOf(
+                                source.getUnit()))
+                        .convertTo(
+                                VolumeUnit.valueOf(
+                                        target.getUnit()));
+
+            case "TEMPERATURE":
+
+                return new Quantity<>(
+                        source.getValue(),
+                        TemperatureUnit.valueOf(
+                                source.getUnit()))
+                        .convertTo(
+                                TemperatureUnit.valueOf(
+                                        target.getUnit()));
+
+            default:
+
+                logger.severe(
+                        "Unsupported Measurement Type");
+
+                throw new IllegalArgumentException(
+                        "Unsupported Measurement Type");
+        }
     }
-}
 }
