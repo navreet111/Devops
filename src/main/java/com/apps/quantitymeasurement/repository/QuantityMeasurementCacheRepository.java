@@ -1,6 +1,6 @@
 package com.apps.quantitymeasurement.repository;
 
-import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +122,6 @@ public class QuantityMeasurementCacheRepository
 
         cache.clear();
     }
-
 
     @Override
     public void releaseResources() {

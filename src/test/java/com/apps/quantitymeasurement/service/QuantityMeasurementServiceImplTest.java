@@ -1,6 +1,6 @@
 package com.apps.quantitymeasurement.service;
 
-import com.apps.quantitymeasurement.model.QuantityDTO;
+import com.apps.quantitymeasurement.dto.QuantityDTO;
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

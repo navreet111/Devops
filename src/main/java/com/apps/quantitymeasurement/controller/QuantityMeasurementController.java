@@ -1,146 +1,460 @@
 package com.apps.quantitymeasurement.controller;
 
-import com.apps.quantitymeasurement.model.QuantityDTO;
+import com.apps.quantitymeasurement.dto.OperationType;
+import com.apps.quantitymeasurement.dto.QuantityDTO;
+import com.apps.quantitymeasurement.dto.QuantityInputDTO;
+import com.apps.quantitymeasurement.dto.QuantityMeasurementDTO;
 import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
 
-import java.util.logging.Logger;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.logging.Logger;
+import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementRepository;
+@RestController
+@RequestMapping("/api/v1/quantities")
+@Tag(
+        name = "Quantity Measurements",
+        description = "REST API for quantity measurement operations"
+)
 public class QuantityMeasurementController {
 
     private static final Logger logger =
             Logger.getLogger(
                     QuantityMeasurementController.class.getName());
 
-    private final IQuantityMeasurementService service;
-
-    public QuantityMeasurementController(
-            IQuantityMeasurementService service) {
-
-        if (service == null) {
-
-            throw new IllegalArgumentException(
-                    "Service cannot be null");
-        }
-
-        this.service = service;
-    }
-
+    @Autowired
+    private IQuantityMeasurementService service;
+    @Autowired
+    private QuantityMeasurementRepository repository;
     // =====================================================
-    // Compare
+    // JSON Examples
     // =====================================================
 
-    public boolean performCompare(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2) {
+    private static final String EX_FEET_INCH =
+            """
+                    {
+                      "thisQuantityDTO":{
+                         "value":1.0,
+                         "unit":"FEET",
+                         "measurementType":"LengthUnit"
+                      },
+                      "thatQuantityDTO":{
+                         "value":12.0,
+                         "unit":"INCHES",
+                         "measurementType":"LengthUnit"
+                      }
+                    }
+                    """;
+
+    private static final String EX_YARD_FEET =
+            """
+                    {
+                      "thisQuantityDTO":{
+                         "value":1.0,
+                         "unit":"YARDS",
+                         "measurementType":"LengthUnit"
+                      },
+                      "thatQuantityDTO":{
+                         "value":3.0,
+                         "unit":"FEET",
+                         "measurementType":"LengthUnit"
+                      }
+                    }
+                    """;
+
+    private static final String EX_WITH_TARGET =
+            """
+                    {
+                      "thisQuantityDTO":{
+                         "value":1.0,
+                         "unit":"FEET",
+                         "measurementType":"LengthUnit"
+                      },
+                      "thatQuantityDTO":{
+                         "value":12.0,
+                         "unit":"INCHES",
+                         "measurementType":"LengthUnit"
+                      },
+                      "targetQuantityDTO":{
+                         "value":0.0,
+                         "unit":"INCHES",
+                         "measurementType":"LengthUnit"
+                      }
+                    }
+                    """;
+    // =====================================================
+// Compare Quantities
+// =====================================================
+
+    @Operation(
+            summary = "Compare Two Quantities",
+            description = "Checks whether two quantities are equal."
+    )
+    @PostMapping("/compare")
+    public ResponseEntity<QuantityMeasurementDTO>
+    performComparison(
+
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO) {
 
         logger.info(
-                "Performing Comparison");
+                "Performing Quantity Comparison");
 
-        return service.compare(
-                quantity1,
-                quantity2);
+        boolean result =
+                service.compare(
+
+                        inputDTO.getThisQuantityDTO(),
+
+                        inputDTO.getThatQuantityDTO());
+
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+
+                        true,
+
+                        "Comparison Successful",
+
+                        result);
+
+        return ResponseEntity.ok(
+                response);
     }
-
     // =====================================================
-    // Convert
-    // =====================================================
+// Convert Quantity
+// =====================================================
 
-    public QuantityDTO performConvert(
-            QuantityDTO quantity,
-            QuantityDTO targetUnit) {
+    @Operation(
+            summary = "Convert Quantity",
+            description = "Converts one quantity into another unit."
+    )
+    @PostMapping("/convert")
+    public ResponseEntity<QuantityMeasurementDTO>
+    performConversion(
+
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO) {
 
         logger.info(
-                "Performing Conversion");
+                "Performing Quantity Conversion");
 
-        return service.convert(
-                quantity,
-                targetUnit);
+        QuantityDTO result =
+
+                service.convert(
+
+                        inputDTO.getThisQuantityDTO(),
+
+                        inputDTO.getTargetQuantityDTO());
+
+        QuantityMeasurementDTO response =
+
+                new QuantityMeasurementDTO(
+
+                        true,
+
+                        "Conversion Successful",
+
+                        result);
+
+        return ResponseEntity.ok(
+                response);
     }
-
     // =====================================================
-    // Add
-    // =====================================================
+// Add Quantities
+// =====================================================
 
-    public QuantityDTO performAdd(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2) {
+    @Operation(
+            summary = "Add Two Quantities",
+            description = "Adds two quantities having same measurement type."
+    )
+    @PostMapping("/add")
+    public ResponseEntity<QuantityMeasurementDTO>
+    performAddition(
+
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO) {
 
         logger.info(
-                "Performing Addition");
+                "Performing Quantity Addition");
 
-        return service.add(
-                quantity1,
-                quantity2);
+        QuantityDTO result =
+                service.add(
+
+                        inputDTO.getThisQuantityDTO(),
+
+                        inputDTO.getThatQuantityDTO());
+
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+
+                        true,
+
+                        "Addition Successful",
+
+                        result);
+
+        return ResponseEntity.ok(
+                response);
     }
+    // =====================================================
+// Add Quantities With Target Unit
+// =====================================================
 
-    public QuantityDTO performAdd(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2,
-            QuantityDTO targetUnit) {
+    @Operation(
+            summary = "Add Two Quantities In Target Unit",
+            description = "Adds two quantities and returns the result in the specified target unit."
+    )
+    @PostMapping("/add/target")
+    public ResponseEntity<QuantityMeasurementDTO>
+    performAdditionWithTargetUnit(
+
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO) {
 
         logger.info(
-                "Performing Addition");
+                "Performing Quantity Addition With Target Unit");
 
-        return service.add(
-                quantity1,
-                quantity2,
-                targetUnit);
+        QuantityDTO result =
+                service.add(
+
+                        inputDTO.getThisQuantityDTO(),
+
+                        inputDTO.getThatQuantityDTO(),
+
+                        inputDTO.getTargetQuantityDTO());
+
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+
+                        true,
+
+                        "Addition Successful",
+
+                        result);
+
+        return ResponseEntity.ok(
+                response);
     }
-
     // =====================================================
-    // Subtract
-    // =====================================================
+// Subtract Quantities
+// =====================================================
 
-    public QuantityDTO performSubtract(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2) {
+    @Operation(
+            summary = "Subtract Two Quantities",
+            description = "Subtracts two quantities having same measurement type."
+    )
+    @PostMapping("/subtract")
+    public ResponseEntity<QuantityMeasurementDTO>
+    performSubtraction(
+
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO) {
 
         logger.info(
-                "Performing Subtraction");
+                "Performing Quantity Subtraction");
 
-        return service.subtract(
-                quantity1,
-                quantity2);
+        QuantityDTO result =
+                service.subtract(
+
+                        inputDTO.getThisQuantityDTO(),
+
+                        inputDTO.getThatQuantityDTO());
+
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+
+                        true,
+
+                        "Subtraction Successful",
+
+                        result);
+
+        return ResponseEntity.ok(
+                response);
     }
+    // =====================================================
+// Subtract Quantities With Target Unit
+// =====================================================
 
-    public QuantityDTO performSubtract(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2,
-            QuantityDTO targetUnit) {
+    @Operation(
+            summary = "Subtract Two Quantities In Target Unit",
+            description = "Subtracts two quantities and returns the result in the specified target unit."
+    )
+    @PostMapping("/subtract/target")
+    public ResponseEntity<QuantityMeasurementDTO>
+    performSubtractionWithTargetUnit(
+
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO) {
 
         logger.info(
-                "Performing Subtraction");
+                "Performing Quantity Subtraction With Target Unit");
 
-        return service.subtract(
-                quantity1,
-                quantity2,
-                targetUnit);
+        QuantityDTO result =
+                service.subtract(
+
+                        inputDTO.getThisQuantityDTO(),
+
+                        inputDTO.getThatQuantityDTO(),
+
+                        inputDTO.getTargetQuantityDTO());
+
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+
+                        true,
+
+                        "Subtraction Successful",
+
+                        result);
+
+        return ResponseEntity.ok(
+                response);
     }
 
     // =====================================================
-    // Divide
-    // =====================================================
+// Divide Quantities
+// =====================================================
 
-    public double performDivide(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2) {
+    @Operation(
+            summary = "Divide Two Quantities",
+            description = "Divides one quantity by another."
+    )
+    @PostMapping("/divide")
+    public ResponseEntity<QuantityMeasurementDTO>
+    performDivision(
+
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO) {
 
         logger.info(
-                "Performing Division");
+                "Performing Quantity Division");
 
-        return service.divide(
-                quantity1,
-                quantity2);
+        double result =
+                service.divide(
+
+                        inputDTO.getThisQuantityDTO(),
+
+                        inputDTO.getThatQuantityDTO());
+
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+
+                        true,
+
+                        "Division Successful",
+
+                        result);
+
+        return ResponseEntity.ok(
+                response);
     }
-
     // =====================================================
-    // Display
-    // =====================================================
+// Get History By Operation
+// =====================================================
 
-    public void displayResult(
-            Object result) {
+    @Operation(
+            summary = "Get History By Operation",
+            description = "Returns all quantity measurements for the given operation."
+    )
+    @GetMapping("/history/operation/{operation}")
+    public ResponseEntity<List<QuantityMeasurementEntity>>
+    getHistoryByOperation(
+
+            @PathVariable
+            OperationType operation) {
 
         logger.info(
-                String.valueOf(result));
+                "Fetching History By Operation");
+
+        List<QuantityMeasurementEntity> history =
+
+                repository.findByOperation(
+                        operation.name());
+
+        return ResponseEntity.ok(
+                history);
     }
+    // =====================================================
+// Get History By Measurement Type
+// =====================================================
+
+    @Operation(
+            summary = "Get History By Measurement Type",
+            description = "Returns all measurements of a specific type."
+    )
+    @GetMapping("/history/type/{type}")
+    public ResponseEntity<List<QuantityMeasurementEntity>>
+    getHistoryByMeasurementType(
+
+            @PathVariable
+            String type) {
+
+        logger.info(
+                "Fetching History By Measurement Type");
+
+        List<QuantityMeasurementEntity> history =
+
+                repository.findByThisQuantityMeasurementType(
+                        type);
+
+        return ResponseEntity.ok(
+                history);
+    }
+    // =====================================================
+// Get Total Records
+// =====================================================
+
+    @Operation(
+            summary = "Get Total Records",
+            description = "Returns total number of stored measurements."
+    )
+    @GetMapping("/count")
+    public ResponseEntity<Long>
+    getTotalCount() {
+
+        logger.info(
+                "Fetching Total Count");
+
+        return ResponseEntity.ok(
+                repository.count());
+    }
+    // =====================================================
+// Delete History
+// =====================================================
+
+    @Operation(
+            summary = "Delete Complete History",
+            description = "Deletes all quantity measurement history."
+    )
+    @DeleteMapping("/history")
+    public ResponseEntity<String>
+    deleteHistory() {
+
+        logger.info(
+                "Deleting History");
+
+        repository.deleteAll();
+
+        return ResponseEntity.ok(
+                "History Deleted Successfully");
+    }
+
 }

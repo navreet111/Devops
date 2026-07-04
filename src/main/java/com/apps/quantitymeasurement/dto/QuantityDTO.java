@@ -1,11 +1,13 @@
-package com.apps.quantitymeasurement.model;
+package com.apps.quantitymeasurement.dto;
+
+import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
+import java.util.Objects;
 
+@Embeddable
 public class QuantityDTO
         implements Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     private double value;
 
@@ -13,83 +15,82 @@ public class QuantityDTO
 
     private String measurementType;
 
-    private boolean hasError;
-
-    private String errorMessage;
+    public QuantityDTO() {
+    }
 
     public QuantityDTO(
             double value,
             String unit,
-            String measurementType
-    ) {
+            String measurementType) {
 
         this.value = value;
         this.unit = unit;
         this.measurementType = measurementType;
-        this.hasError = false;
-    }
-
-    public QuantityDTO(
-            String errorMessage
-    ) {
-
-        this.hasError = true;
-        this.errorMessage = errorMessage;
     }
 
     public double getValue() {
-
         return value;
     }
 
     public void setValue(
-            double value
-    ) {
-
+            double value) {
         this.value = value;
     }
 
     public String getUnit() {
-
         return unit;
     }
 
     public void setUnit(
-            String unit
-    ) {
-
+            String unit) {
         this.unit = unit;
     }
 
     public String getMeasurementType() {
-
         return measurementType;
     }
 
     public void setMeasurementType(
-            String measurementType
-    ) {
-
+            String measurementType) {
         this.measurementType = measurementType;
     }
 
-    public boolean hasError() {
+    @Override
+    public boolean equals(Object obj) {
 
-        return hasError;
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof QuantityDTO))
+            return false;
+
+        QuantityDTO other =
+                (QuantityDTO) obj;
+
+        return Double.compare(
+                value,
+                other.value) == 0
+
+                && Objects.equals(
+                unit,
+                other.unit)
+
+                && Objects.equals(
+                measurementType,
+                other.measurementType);
     }
 
-    public String getErrorMessage() {
+    @Override
+    public int hashCode() {
 
-        return errorMessage;
+        return Objects.hash(
+                value,
+                unit,
+                measurementType);
     }
 
     @Override
     public String toString() {
-
-        if (hasError) {
-
-            return "Error: " + errorMessage;
-        }
 
         return "QuantityDTO{" +
                 "value=" + value +

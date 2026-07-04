@@ -1,31 +1,38 @@
 package com.apps.quantitymeasurement.service;
 
-import com.apps.quantitymeasurement.*;
-import com.apps.quantitymeasurement.model.QuantityDTO;
-import com.apps.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.apps.quantitymeasurement.Quantity;
+import com.apps.quantitymeasurement.LengthUnit;
+import com.apps.quantitymeasurement.WeightUnit;
+import com.apps.quantitymeasurement.VolumeUnit;
+import com.apps.quantitymeasurement.TemperatureUnit;
+import com.apps.quantitymeasurement.IMeasurable;
+import com.apps.quantitymeasurement.dto.QuantityDTO;
+import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
+
+
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.logging.Logger;
-
+@Service
 public class QuantityMeasurementServiceImpl
         implements IQuantityMeasurementService {
 
-    private static final Logger logger =
-            Logger.getLogger(
-                    QuantityMeasurementServiceImpl.class.getName());
 
-    private final IQuantityMeasurementRepository repository;
+
+
+    @Autowired
+    private QuantityMeasurementRepository repository;
+    public QuantityMeasurementServiceImpl() {
+    }
 
     public QuantityMeasurementServiceImpl(
-            IQuantityMeasurementRepository repository) {
-
-        if (repository == null) {
-            throw new IllegalArgumentException(
-                    "Repository cannot be null");
-        }
+            QuantityMeasurementRepository repository) {
 
         this.repository = repository;
     }
+
 
     // =====================================================
     // Compare
@@ -52,8 +59,7 @@ public class QuantityMeasurementServiceImpl
                         "COMPARE",
                         result));
 
-        logger.info(
-                "Comparison Successful");
+
 
         return result;
     }
@@ -85,8 +91,6 @@ public class QuantityMeasurementServiceImpl
                         "CONVERT",
                         dto));
 
-        logger.info(
-                "Conversion Successful");
 
         return dto;
     }
@@ -122,8 +126,6 @@ public class QuantityMeasurementServiceImpl
                         "ADD",
                         dto));
 
-        logger.info(
-                "Addition Successful");
 
         return dto;
     }
@@ -158,8 +160,6 @@ public class QuantityMeasurementServiceImpl
                         "ADD",
                         dto));
 
-        logger.info(
-                "Addition Successful");
 
         return dto;
     }
@@ -194,13 +194,11 @@ public class QuantityMeasurementServiceImpl
                         "SUBTRACT",
                         dto));
 
-        logger.info(
-                "Subtraction Successful");
 
         return dto;
     }
 
-    @Override
+
     public QuantityDTO subtract(
             QuantityDTO quantity1,
             QuantityDTO quantity2,
@@ -230,8 +228,6 @@ public class QuantityMeasurementServiceImpl
                         "SUBTRACT",
                         dto));
 
-        logger.info(
-                "Subtraction Successful");
 
         return dto;
     }
@@ -261,12 +257,15 @@ public class QuantityMeasurementServiceImpl
                         "DIVIDE",
                         result));
 
-        logger.info(
-                "Division Successful");
+
 
         return result;
     }
+    @Override
+    public long getTotalCount() {
 
+        return repository.count();
+    }
     // =====================================================
     // Helper Methods
     // =====================================================
@@ -303,8 +302,7 @@ public class QuantityMeasurementServiceImpl
 
             default:
 
-                logger.severe(
-                        "Unsupported Measurement Type");
+
 
                 throw new IllegalArgumentException(
                         "Unsupported Measurement Type");
@@ -335,8 +333,6 @@ public class QuantityMeasurementServiceImpl
 
             default:
 
-                logger.severe(
-                        "Unsupported Measurement Type");
 
                 throw new IllegalArgumentException(
                         "Unsupported Measurement Type");
@@ -392,8 +388,7 @@ public class QuantityMeasurementServiceImpl
 
             default:
 
-                logger.severe(
-                        "Unsupported Measurement Type");
+
 
                 throw new IllegalArgumentException(
                         "Unsupported Measurement Type");

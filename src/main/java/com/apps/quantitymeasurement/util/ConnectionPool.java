@@ -107,15 +107,5 @@ public class ConnectionPool {
         }
     }
 
-    public static void main(String[] args) {
 
-        Connection connection =
-                getConnection();
-
-        logger.info(
-                "Connection Valid : "
-                        + validateConnection(connection));
-
-        closeConnection();
-    }
 }

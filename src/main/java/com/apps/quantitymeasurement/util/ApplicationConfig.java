@@ -225,12 +225,5 @@ public class ApplicationConfig {
                 "=================================");
     }
 
-    public static void main(
-            String[] args) {
 
-        ApplicationConfig config =
-                ApplicationConfig.getInstance();
-
-        config.printAllProperties();
-    }
 }
