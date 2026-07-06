@@ -456,5 +456,10 @@ public class QuantityMeasurementController {
         return ResponseEntity.ok(
                 "History Deleted Successfully");
     }
+    @GetMapping("/login-success")
+    public String loginSuccess() {
+
+        return "Google Login Successful";
+    }
 
 }

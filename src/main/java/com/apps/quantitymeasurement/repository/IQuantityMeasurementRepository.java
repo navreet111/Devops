@@ -25,4 +25,6 @@ public interface IQuantityMeasurementRepository {
     void deleteAll();
 
     void releaseResources();
+
+    long count();
 }

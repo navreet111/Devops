@@ -112,7 +112,11 @@ public class QuantityMeasurementCacheRepository
 
         return cache.size();
     }
+    @Override
+    public long count() {
 
+        return cache.size();
+    }
     // =====================================================
     // Delete All
     // =====================================================

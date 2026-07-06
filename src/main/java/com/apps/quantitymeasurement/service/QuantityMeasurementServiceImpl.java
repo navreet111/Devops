@@ -11,7 +11,7 @@ import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
 
 
 import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
-import com.apps.quantitymeasurement.repository.QuantityMeasurementRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,16 +23,20 @@ public class QuantityMeasurementServiceImpl
 
 
     @Autowired
-    private QuantityMeasurementRepository repository;
+    private IQuantityMeasurementRepository repository;
     public QuantityMeasurementServiceImpl() {
     }
 
     public QuantityMeasurementServiceImpl(
-            QuantityMeasurementRepository repository) {
+            IQuantityMeasurementRepository repository) {
+
+        if (repository == null) {
+            throw new IllegalArgumentException(
+                    "Repository cannot be null");
+        }
 
         this.repository = repository;
     }
-
 
     // =====================================================
     // Compare
