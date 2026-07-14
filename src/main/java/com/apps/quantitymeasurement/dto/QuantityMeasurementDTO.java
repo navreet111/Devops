@@ -26,6 +26,12 @@ public class QuantityMeasurementDTO {
         this.result = result;
     }
 
+    public QuantityMeasurementDTO(boolean result) {
+    }
+
+    public QuantityMeasurementDTO(QuantityDTO result) {
+    }
+
     public boolean isSuccess() {
         return success;
     }

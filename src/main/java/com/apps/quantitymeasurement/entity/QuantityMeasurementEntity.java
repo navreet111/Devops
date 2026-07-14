@@ -4,10 +4,11 @@ import com.apps.quantitymeasurement.dto.QuantityDTO;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "quantity_measurement_history")
+@Table(name = "quantity_measurements")
 public class QuantityMeasurementEntity
         implements Serializable {
 
@@ -161,7 +162,7 @@ public class QuantityMeasurementEntity
             boolean error) {
         this.error = error;
     }
-
+    private LocalDateTime createdAt;
     @Override
     public boolean equals(
             Object obj) {

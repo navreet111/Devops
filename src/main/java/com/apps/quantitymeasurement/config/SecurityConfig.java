@@ -23,7 +23,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http) throws Exception {
-
+        System.out.println("=========== SECURITY CONFIG LOADED ===========");
         http
 
                 .csrf(csrf -> csrf.disable())
@@ -32,13 +32,18 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/",
+                                "/login",
+                                "/login.html",
+                                "/login-success.html",
+                                "/api/auth/**",
+                                "/oauth2/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/api-docs/**",
-                                "/oauth2/**",
-                                "/login/**",
-                                "/api/auth/**",
-                                "/h2-console/**")
+                                "/h2-console/**",
+                                "/css/**",
+                                "/js/**"
+                        )
                         .permitAll()
 
                         .anyRequest()
@@ -50,17 +55,16 @@ public class SecurityConfig {
                                 exception.authenticationEntryPoint(
 
                                         authenticationEntryPoint))
-                .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(user ->
-                                user.userService(customOAuth2UserService))
-                        .successHandler((request, response, authentication) -> {
+                .oauth2Login(oauth ->
 
-                            System.out.println("SUCCESS HANDLER FROM SECURITY CONFIG");
+                        oauth
 
-                            response.setContentType("text/plain");
-                            response.getWriter().write("LOGIN SUCCESS");
+                                .userInfoEndpoint(user ->
 
-                        })
+                                        user.userService(customOAuth2UserService))
+
+                                .successHandler(successHandler)
+
                 );
 
         http.headers(headers ->

@@ -14,9 +14,7 @@ public class QuantityInputDTO {
     private QuantityDTO thisQuantityDTO;
 
     @Valid
-    @NotNull(message = "Second quantity cannot be null")
     private QuantityDTO thatQuantityDTO;
-
     @Valid
     @Schema(nullable = true)
     private QuantityDTO targetQuantityDTO;

@@ -102,34 +102,21 @@ public class QuantityMeasurementController {
             description = "Checks whether two quantities are equal."
     )
     @PostMapping("/compare")
-    public ResponseEntity<QuantityMeasurementDTO>
-    performComparison(
+    public ResponseEntity<QuantityMeasurementDTO> compare(
+            @RequestBody QuantityInputDTO inputDTO) {
 
-            @Valid
-            @RequestBody
-            QuantityInputDTO inputDTO) {
-
-        logger.info(
-                "Performing Quantity Comparison");
+        if (inputDTO.getThatQuantityDTO() == null) {
+            throw new IllegalArgumentException("Second quantity required");
+        }
 
         boolean result =
                 service.compare(
-
                         inputDTO.getThisQuantityDTO(),
-
                         inputDTO.getThatQuantityDTO());
 
-        QuantityMeasurementDTO response =
-                new QuantityMeasurementDTO(
-
-                        true,
-
-                        "Comparison Successful",
-
-                        result);
-
         return ResponseEntity.ok(
-                response);
+                new QuantityMeasurementDTO(result)
+        );
     }
     // =====================================================
 // Convert Quantity
@@ -174,41 +161,28 @@ public class QuantityMeasurementController {
     // =====================================================
 // Add Quantities
 // =====================================================
-
-    @Operation(
-            summary = "Add Two Quantities",
-            description = "Adds two quantities having same measurement type."
-    )
-    @PostMapping("/add")
-    public ResponseEntity<QuantityMeasurementDTO>
-    performAddition(
-
-            @Valid
-            @RequestBody
-            QuantityInputDTO inputDTO) {
-
-        logger.info(
-                "Performing Quantity Addition");
-
-        QuantityDTO result =
-                service.add(
-
-                        inputDTO.getThisQuantityDTO(),
-
-                        inputDTO.getThatQuantityDTO());
-
-        QuantityMeasurementDTO response =
-                new QuantityMeasurementDTO(
-
-                        true,
-
-                        "Addition Successful",
-
-                        result);
-
-        return ResponseEntity.ok(
-                response);
-    }
+//
+//    @Operation(
+//            summary = "Add Two Quantities",
+//            description = "Adds two quantities having same measurement type."
+//    )
+//    @PostMapping("/add")
+//    public ResponseEntity<QuantityMeasurementDTO> add(
+//            @RequestBody QuantityInputDTO inputDTO) {
+//
+//        if (inputDTO.getThatQuantityDTO() == null) {
+//            throw new IllegalArgumentException("Second quantity required");
+//        }
+//
+//        QuantityDTO result =
+//                service.add(
+//                        inputDTO.getThisQuantityDTO(),
+//                        inputDTO.getThatQuantityDTO());
+//
+//        return ResponseEntity.ok(
+//                new QuantityMeasurementDTO(result)
+//        );
+//    }
     // =====================================================
 // Add Quantities With Target Unit
 // =====================================================
@@ -217,37 +191,22 @@ public class QuantityMeasurementController {
             summary = "Add Two Quantities In Target Unit",
             description = "Adds two quantities and returns the result in the specified target unit."
     )
-    @PostMapping("/add/target")
-    public ResponseEntity<QuantityMeasurementDTO>
-    performAdditionWithTargetUnit(
+    @PostMapping("/add")
+    public ResponseEntity<QuantityMeasurementDTO> add(
+            @RequestBody QuantityInputDTO inputDTO) {
 
-            @Valid
-            @RequestBody
-            QuantityInputDTO inputDTO) {
-
-        logger.info(
-                "Performing Quantity Addition With Target Unit");
+        if (inputDTO.getThatQuantityDTO() == null) {
+            throw new IllegalArgumentException("Second quantity required");
+        }
 
         QuantityDTO result =
                 service.add(
-
                         inputDTO.getThisQuantityDTO(),
-
-                        inputDTO.getThatQuantityDTO(),
-
-                        inputDTO.getTargetQuantityDTO());
-
-        QuantityMeasurementDTO response =
-                new QuantityMeasurementDTO(
-
-                        true,
-
-                        "Addition Successful",
-
-                        result);
+                        inputDTO.getThatQuantityDTO());
 
         return ResponseEntity.ok(
-                response);
+                new QuantityMeasurementDTO(result)
+        );
     }
     // =====================================================
 // Subtract Quantities
@@ -302,7 +261,9 @@ public class QuantityMeasurementController {
             @Valid
             @RequestBody
             QuantityInputDTO inputDTO) {
-
+        if (inputDTO.getThatQuantityDTO() == null) {
+            throw new IllegalArgumentException("Second quantity required");
+        }
         logger.info(
                 "Performing Quantity Subtraction With Target Unit");
 
@@ -343,7 +304,9 @@ public class QuantityMeasurementController {
             @Valid
             @RequestBody
             QuantityInputDTO inputDTO) {
-
+        if (inputDTO.getThatQuantityDTO() == null) {
+            throw new IllegalArgumentException("Second quantity required");
+        }
         logger.info(
                 "Performing Quantity Division");
 
@@ -365,6 +328,22 @@ public class QuantityMeasurementController {
 
         return ResponseEntity.ok(
                 response);
+    }
+    @PostMapping("/divide/target")
+    public ResponseEntity<QuantityMeasurementDTO> performDivisionWithTarget(
+            @Valid @RequestBody QuantityInputDTO inputDTO) {
+        if (inputDTO.getThatQuantityDTO() == null) {
+            throw new IllegalArgumentException("Second quantity required");
+        }
+        double result = service.divide(
+                inputDTO.getThisQuantityDTO(),
+                inputDTO.getThatQuantityDTO());
+
+        return ResponseEntity.ok(
+                new QuantityMeasurementDTO(
+                        true,
+                        "Division Successful",
+                        result));
     }
     // =====================================================
 // Get History By Operation
@@ -391,6 +370,16 @@ public class QuantityMeasurementController {
 
         return ResponseEntity.ok(
                 history);
+    }
+    @GetMapping("/history")
+    public ResponseEntity<List<QuantityMeasurementEntity>> getHistory(){
+
+        return ResponseEntity.ok(
+
+                repository.findAll()
+
+        );
+
     }
     // =====================================================
 // Get History By Measurement Type

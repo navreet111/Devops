@@ -1,7 +1,7 @@
 package com.apps.quantitymeasurement.service;
 
 import com.apps.quantitymeasurement.dto.QuantityDTO;
-import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 class QuantityMeasurementServiceImplTest {
 
-    private IQuantityMeasurementRepository repository;
+    private QuantityMeasurementRepository repository;
 
     private QuantityMeasurementServiceImpl service;
 
@@ -41,7 +41,7 @@ class QuantityMeasurementServiceImplTest {
 
         repository =
                 mock(
-                        IQuantityMeasurementRepository.class);
+                        QuantityMeasurementRepository.class);
 
         service =
                 new QuantityMeasurementServiceImpl(

@@ -10,8 +10,9 @@ import com.apps.quantitymeasurement.dto.QuantityDTO;
 import com.apps.quantitymeasurement.entity.QuantityMeasurementEntity;
 
 
-import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
 
+
+import com.apps.quantitymeasurement.repository.QuantityMeasurementRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,22 +22,19 @@ public class QuantityMeasurementServiceImpl
 
 
 
-
     @Autowired
-    private IQuantityMeasurementRepository repository;
+    private QuantityMeasurementRepository repository;
+
     public QuantityMeasurementServiceImpl() {
     }
 
-    public QuantityMeasurementServiceImpl(
-            IQuantityMeasurementRepository repository) {
-
-        if (repository == null) {
-            throw new IllegalArgumentException(
-                    "Repository cannot be null");
-        }
-
+    public QuantityMeasurementServiceImpl(QuantityMeasurementRepository repository) {
         this.repository = repository;
     }
+
+
+
+
 
     // =====================================================
     // Compare

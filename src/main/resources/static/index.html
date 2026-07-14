@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quantity Measurement</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="topbar">
+
+        <div>
+
+            <h1>Quantity Measurement System</h1>
+
+            <p>Spring Boot • REST API • Java</p>
+
+        </div>
+
+        <div class="top-actions">
+
+            <button id="themeBtn">
+
+                🌙 Dark Mode
+
+            </button>
+
+            <button id="logoutBtn">
+
+                🚪 Logout
+
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- Quantity Types -->
+
+    <section>
+
+        <h2>Select Measurement Type</h2>
+
+        <div class="cards">
+
+            <div class="card active" data-type="LENGTH">
+
+                📏
+
+                <h3>Length</h3>
+
+            </div>
+
+            <div class="card" data-type="WEIGHT">
+
+                ⚖️
+
+                <h3>Weight</h3>
+
+            </div>
+
+            <div class="card" data-type="TEMPERATURE">
+
+                🌡️
+
+                <h3>Temperature</h3>
+
+            </div>
+
+            <div class="card" data-type="VOLUME">
+
+                🧪
+
+                <h3>Volume</h3>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Operations -->
+
+    <section>
+
+        <h2>Select Operation</h2>
+
+        <div class="operations">
+
+            <button id="compareBtn">Compare</button>
+
+            <button id="convertBtn">Convert</button>
+
+            <button id="addBtn">Add</button>
+
+            <button id="subtractBtn">Subtract</button>
+
+            <button id="divideBtn">Divide</button>
+
+        </div>
+
+    </section>
+
+    <!-- Inputs -->
+
+    <section class="inputs">
+
+        <div>
+
+            <label>Value 1</label>
+
+            <input
+                    id="value1"
+                    type="number">
+
+            <select id="unit1"></select>
+
+        </div>
+
+        <div id="value2Container">
+            <label>Value 2</label>
+            <input id="value2" type="number">
+            <select id="unit2"></select>
+        </div>
+
+
+        <div id="targetContainer">
+            <label>Target Unit</label>
+            <select id="targetUnit"></select>
+        </div>
+
+    </section>
+
+    <button id="calculateBtn">
+
+        Calculate
+
+    </button>
+
+    <!-- Result -->
+
+    <section class="result">
+
+        <h2>Result</h2>
+
+        <div id="result">
+
+            Waiting...
+
+        </div>
+
+    </section>
+    <!-- History -->
+
+    <section class="history">
+
+        <div class="history-header">
+
+            <h2>Recent Operations</h2>
+
+            <div class="history-actions">
+
+                <input
+                        type="text"
+                        id="searchHistory"
+                        placeholder="Search history...">
+
+
+
+            </div>
+
+        </div>
+
+        <table id="historyTable">
+
+            <thead>
+
+            <tr>
+
+                <th>Date</th>
+
+                <th>Type</th>
+
+                <th>Operation</th>
+
+                <th>Result</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            </tbody>
+
+        </table>
+
+    </section>
+</div>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

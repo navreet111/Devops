@@ -8,15 +8,10 @@ import java.util.List;
 
 @Repository
 public interface QuantityMeasurementRepository
-        extends JpaRepository<
-        QuantityMeasurementEntity,
-        Integer> {
+        extends JpaRepository<QuantityMeasurementEntity, Integer> {
 
-    List<QuantityMeasurementEntity>
-    findByOperation(
-            String operation);
+    List<QuantityMeasurementEntity> findByOperation(String operation);
 
-    List<QuantityMeasurementEntity>
-    findByThisQuantityMeasurementType(
-            String measurementType);
+    List<QuantityMeasurementEntity> findByThisQuantityMeasurementType(String measurementType);
+
 }
