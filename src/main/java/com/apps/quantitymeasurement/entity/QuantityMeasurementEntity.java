@@ -162,7 +162,21 @@ public class QuantityMeasurementEntity
             boolean error) {
         this.error = error;
     }
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
     @Override
     public boolean equals(
             Object obj) {

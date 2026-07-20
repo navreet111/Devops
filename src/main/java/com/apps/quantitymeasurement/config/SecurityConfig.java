@@ -10,6 +10,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.apps.quantitymeasurement.security.CustomOAuth2UserService;
 import com.apps.quantitymeasurement.security.JwtAuthenticationFilter;
 import com.apps.quantitymeasurement.security.JwtAuthenticationEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+//import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.List;
+
 @Configuration
 public class SecurityConfig {
     @Autowired
@@ -25,7 +31,7 @@ public class SecurityConfig {
             HttpSecurity http) throws Exception {
         System.out.println("=========== SECURITY CONFIG LOADED ===========");
         http
-
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
@@ -77,5 +83,16 @@ public class SecurityConfig {
 
                 UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return (CorsConfigurationSource) source;
     }
 }

@@ -27,9 +27,15 @@ public class QuantityMeasurementDTO {
     }
 
     public QuantityMeasurementDTO(boolean result) {
+        this.success = true;
+        this.message = "Comparison Successful";
+        this.result = result;
     }
 
     public QuantityMeasurementDTO(QuantityDTO result) {
+        this.success = true;
+        this.message = "Operation Successful";
+        this.result = result;
     }
 
     public boolean isSuccess() {

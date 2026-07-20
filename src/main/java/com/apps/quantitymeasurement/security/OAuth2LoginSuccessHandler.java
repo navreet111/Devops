@@ -35,6 +35,7 @@ public class OAuth2LoginSuccessHandler
         System.out.println("===== SUCCESS HANDLER EXECUTED =====");
         System.out.println("Generated JWT : " + token);
 
-        response.sendRedirect("/login-success.html?token=" + token);
+//        response.sendRedirect("/login-success.html?token=" + token);
+        response.sendRedirect("http://localhost:5173/login?token=" + token);
     }
 }
