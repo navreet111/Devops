@@ -22,13 +22,29 @@ export default function Login() {
   const navigate = useNavigate();
   const { isDark, toggleDarkMode } = useDarkMode();
 
-  useEffect(() => {
+useEffect(() => {
     const token = searchParams.get("token");
+    const name = searchParams.get("name");
+    const picture = searchParams.get("picture");
+const email = searchParams.get("email");
+
+if (email) {
+    localStorage.setItem("email", decodeURIComponent(email));
+}
     if (token) {
-      localStorage.setItem("jwt", token);
-      navigate("/home", { replace: true });
+        localStorage.setItem("jwt", token);
+
+        if (name) {
+            localStorage.setItem("username", decodeURIComponent(name));
+        }
+
+        if (picture) {
+            localStorage.setItem("picture", decodeURIComponent(picture));
+        }
+
+        navigate("/home", { replace: true });
     }
-  }, [searchParams, navigate]);
+}, [searchParams, navigate]);
 
   const token = searchParams.get("token");
 

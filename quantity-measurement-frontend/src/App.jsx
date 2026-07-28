@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
+
 import Home from "./pages/Home";
 import History from "./pages/History";
 import { isLoggedIn } from "./services/quantityService";
@@ -20,6 +21,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
+
         <Route
           path="/home"
           element={

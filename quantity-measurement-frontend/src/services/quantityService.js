@@ -1,12 +1,12 @@
 import axios from "axios";
 
-// ============================================================
-// Backend base URL — Spring Boot runs here. Change if different.
-// ============================================================
+// Auth-service (Google login) — port 8080
 export const BASE_URL = "http://localhost:8080";
-const API_URL = `${BASE_URL}/api/v1/quantities`;
 
-// Axios instance with the JWT automatically attached on every call.
+// Quantity-service (business APIs) — port 8081
+export const QUANTITY_BASE_URL = "http://localhost:8081";
+const API_URL = `${QUANTITY_BASE_URL}/api/v1/quantities`;   // <-- yahi line badli hai
+
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
@@ -140,6 +140,7 @@ export const UNITS_BY_TYPE = {
   TEMPERATURE: ["CELSIUS", "FAHRENHEIT"],
   VOLUME: ["LITRE", "MILLILITRE", "GALLON"],
 };
+//
 
 // Operation types (matches backend OperationType enum) — used for history filter.
 export const OPERATION_TYPES = ["COMPARE", "CONVERT", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE"];

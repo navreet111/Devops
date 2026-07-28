@@ -1,9 +1,6 @@
 import formatDate from "../utils/formatDate";
 
-/**
- * Reusable table used by both Home (recent entries) and History
- * (full list + client-side search).
- */
+
 export default function HistoryTable({ entries = [], searchTerm = "" }) {
   const term = searchTerm.trim().toLowerCase();
 

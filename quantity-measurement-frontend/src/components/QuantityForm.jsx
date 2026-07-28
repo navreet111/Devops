@@ -1,10 +1,13 @@
+import { Ruler, Scale, Thermometer, FlaskConical } from "lucide-react";
 import { UNITS_BY_TYPE } from "../services/quantityService";
 
-/**
- * Reusable form: measurement type cards + operation buttons + value/unit
- * inputs. All state is controlled by the parent (Home.jsx) so this stays
- * a pure presentational component.
- */
+const TYPE_ICONS = {
+  LENGTH: Ruler,
+  WEIGHT: Scale,
+  TEMPERATURE: Thermometer,
+  VOLUME: FlaskConical,
+};
+
 export default function QuantityForm({
   currentType,
   onTypeChange,
@@ -31,19 +34,19 @@ export default function QuantityForm({
       <section>
         <h2>Select Measurement Type</h2>
         <div className="cards">
-          {Object.keys(UNITS_BY_TYPE).map((type) => (
-            <div
-              key={type}
-              className={`card ${currentType === type ? "active" : ""}`}
-              onClick={() => onTypeChange(type)}
-            >
-              {type === "LENGTH" && "📏"}
-              {type === "WEIGHT" && "⚖️"}
-              {type === "TEMPERATURE" && "🌡️"}
-              {type === "VOLUME" && "🧪"}
-              <h3>{type}</h3>
-            </div>
-          ))}
+          {Object.keys(UNITS_BY_TYPE).map((type) => {
+            const Icon = TYPE_ICONS[type];
+            return (
+              <div
+                key={type}
+                className={`card ${currentType === type ? "active" : ""}`}
+                onClick={() => onTypeChange(type)}
+              >
+                <Icon className="card-icon" size={34} strokeWidth={1.75} />
+                <h3>{type}</h3>
+              </div>
+            );
+          })}
         </div>
       </section>
 

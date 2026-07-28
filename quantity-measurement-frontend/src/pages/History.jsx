@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { Trash2 } from "lucide-react";
 import HistoryTable from "../components/HistoryTable";
 import {
   getHistory,
@@ -82,9 +83,10 @@ export default function History() {
             <div className="stat-value">{count ?? "—"}</div>
           </div>
           <div className="history-stat-card">
-            <button className="danger" onClick={handleDeleteAll} disabled={deleting}>
-              {deleting ? "Deleting..." : "🗑️ Delete All History"}
-            </button>
+           <button className="danger" onClick={handleDeleteAll} disabled={deleting}>
+             <Trash2 size={16} />
+             {deleting ? "Deleting..." : "Delete All History"}
+           </button>
           </div>
         </div>
 
