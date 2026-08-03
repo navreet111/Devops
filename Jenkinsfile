@@ -2,10 +2,32 @@ pipeline {
     agent any
 
     stages {
-        stage('Test') {
+
+        stage('Build Auth Service') {
             steps {
-                echo 'Jenkins Pipeline Working Successfully'
+                dir('auth-service') {
+                    sh './mvnw clean package'
+                }
             }
         }
+
+        stage('Build Quantity Service') {
+            steps {
+                dir('quantity-service') {
+                    sh './mvnw clean package'
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('quantity-measurement-frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        // Docker build, Docker login, Docker push, Deploy...
     }
 }
