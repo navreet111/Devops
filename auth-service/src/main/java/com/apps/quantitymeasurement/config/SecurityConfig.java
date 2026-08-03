@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 "/login-success",
                                 "/api/auth/**",
                                 "/oauth2/**",
+                                "/login/oauth2/**",
                                 "/logout"
                         )
                         .permitAll()

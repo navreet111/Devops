@@ -43,7 +43,7 @@ public class OAuth2LoginSuccessHandler
 
 
         response.sendRedirect(
-                "http://localhost:5173/login?token=" + token +
+                "\"http://13.49.123.197/login?token=" + token +
                         "&name=" + URLEncoder.encode(name, StandardCharsets.UTF_8) +
                         "&email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) +
                         "&picture=" + URLEncoder.encode(picture, StandardCharsets.UTF_8)
