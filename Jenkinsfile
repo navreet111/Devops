@@ -73,7 +73,6 @@ pipeline {
                     sh '''
                     docker stop auth-service || true
                     docker rm auth-service || true
-
                     docker run -d --name auth-service \
                       -p 8081:8080 \
                       -e GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" \
@@ -82,21 +81,17 @@ pipeline {
 
                     docker stop quantity-service || true
                     docker rm quantity-service || true
-
                     docker run -d --name quantity-service \
                       -p 8082:8081 \
                       navreet1511/quantity-service:latest
 
                     docker stop quantity-frontend || true
                     docker rm quantity-frontend || true
-
                     docker run -d --name quantity-frontend \
                       -p 80:80 \
                       navreet1511/quantity-measurement-frontend:latest
                     '''
                 }
-            }
-        }
             }
         }
     }
