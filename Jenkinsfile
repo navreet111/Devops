@@ -66,19 +66,37 @@ pipeline {
 
         stage('Deploy Containers') {
             steps {
-                sh '''
-                docker stop auth-service || true
-                docker rm auth-service || true
-                docker run -d --name auth-service -p 8081:8080 navreet1511/auth-service:latest
+                withCredentials([
+                    string(credentialsId: 'GOOGLE_CLIENT_ID', variable: 'GOOGLE_CLIENT_ID'),
+                    string(credentialsId: 'GOOGLE_CLIENT_SECRET', variable: 'GOOGLE_CLIENT_SECRET')
+                ]) {
+                    sh '''
+                    docker stop auth-service || true
+                    docker rm auth-service || true
 
-                docker stop quantity-service || true
-                docker rm quantity-service || true
-                docker run -d --name quantity-service -p 8082:8081 navreet1511/quantity-service:latest
+                    docker run -d --name auth-service \
+                      -p 8081:8080 \
+                      -e GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" \
+                      -e GOOGLE_CLIENT_SECRET="$GOOGLE_CLIENT_SECRET" \
+                      navreet1511/auth-service:latest
 
-                docker stop quantity-frontend || true
-                docker rm quantity-frontend || true
-                docker run -d --name quantity-frontend -p 80:80 navreet1511/quantity-measurement-frontend:latest
-                '''
+                    docker stop quantity-service || true
+                    docker rm quantity-service || true
+
+                    docker run -d --name quantity-service \
+                      -p 8082:8081 \
+                      navreet1511/quantity-service:latest
+
+                    docker stop quantity-frontend || true
+                    docker rm quantity-frontend || true
+
+                    docker run -d --name quantity-frontend \
+                      -p 80:80 \
+                      navreet1511/quantity-measurement-frontend:latest
+                    '''
+                }
+            }
+        }
             }
         }
     }
