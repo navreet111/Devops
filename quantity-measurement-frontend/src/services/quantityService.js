@@ -1,26 +1,44 @@
 import axios from "axios";
 
-// Auth-service (Google login) — port 8080
-export const BASE_URL = "http://ec2-13-49-123-197.eu-north-1.compute.amazonaws.com:8081";
+// ============================================================
+// Backend URLs
+// ============================================================
 
-// Quantity-service (business APIs) — port 8081
-export const QUANTITY_BASE_URL = "http://localhost:8081";
-const API_URL = `${QUANTITY_BASE_URL}/api/v1/quantities`;   // <-- yahi line badli hai
+// Auth Service (Google OAuth)
+export const BASE_URL =
+  "http://ec2-13-49-123-197.eu-north-1.compute.amazonaws.com:8081";
+
+// Quantity Service
+export const QUANTITY_BASE_URL =
+  "http://ec2-13-49-123-197.eu-north-1.compute.amazonaws.com:8082";
+
+const API_URL = `${QUANTITY_BASE_URL}/api/v1/quantities`;
 
 const apiClient = axios.create({
   baseURL: API_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
+
+// ============================================================
+// JWT Interceptor
+// ============================================================
 
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("jwt");
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
-// If the token is missing/expired, backend returns 401 -> send user back to login.
+// ============================================================
+// Handle Unauthorized
+// ============================================================
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -28,64 +46,99 @@ apiClient.interceptors.response.use(
       localStorage.removeItem("jwt");
       window.location.href = "/login";
     }
+
     return Promise.reject(error);
   }
 );
 
-// Builds the QuantityInputDTO shape the backend expects.
+// ============================================================
+// DTO Builder
+// ============================================================
+
 function buildInputDTO(thisQuantity, thatQuantity = null, targetQuantity = null) {
-  const dto = { thisQuantityDTO: thisQuantity };
+  const dto = {
+    thisQuantityDTO: thisQuantity,
+  };
+
   if (thatQuantity) dto.thatQuantityDTO = thatQuantity;
   if (targetQuantity) dto.targetQuantityDTO = targetQuantity;
+
   return dto;
 }
 
 // ============================================================
 // Compare
 // ============================================================
+
 export async function compareQuantities(thisQuantity, thatQuantity) {
-  const res = await apiClient.post("/compare", buildInputDTO(thisQuantity, thatQuantity));
+  const res = await apiClient.post(
+    "/compare",
+    buildInputDTO(thisQuantity, thatQuantity)
+  );
+
   return res.data;
 }
 
 // ============================================================
 // Convert
 // ============================================================
+
 export async function convertQuantity(thisQuantity, targetQuantity) {
-  const res = await apiClient.post("/convert", buildInputDTO(thisQuantity, null, targetQuantity));
+  const res = await apiClient.post(
+    "/convert",
+    buildInputDTO(thisQuantity, null, targetQuantity)
+  );
+
   return res.data;
 }
 
 // ============================================================
 // Add
 // ============================================================
+
 export async function addQuantities(thisQuantity, thatQuantity) {
-  const res = await apiClient.post("/add", buildInputDTO(thisQuantity, thatQuantity));
+  const res = await apiClient.post(
+    "/add",
+    buildInputDTO(thisQuantity, thatQuantity)
+  );
+
   return res.data;
 }
 
 // ============================================================
-// Subtract (with target unit)
+// Subtract
 // ============================================================
-export async function subtractQuantities(thisQuantity, thatQuantity, targetQuantity) {
+
+export async function subtractQuantities(
+  thisQuantity,
+  thatQuantity,
+  targetQuantity
+) {
   const res = await apiClient.post(
     "/subtract/target",
     buildInputDTO(thisQuantity, thatQuantity, targetQuantity)
   );
+
   return res.data;
 }
 
 // ============================================================
-// Divide (with target unit)
+// Divide
 // ============================================================
+
 export async function divideQuantities(thisQuantity, thatQuantity) {
-  const res = await apiClient.post("/divide/target", buildInputDTO(thisQuantity, thatQuantity));
+  const res = await apiClient.post(
+    "/divide/target",
+    buildInputDTO(thisQuantity, thatQuantity)
+  );
+
   return res.data;
 }
 
 // ============================================================
 // History
 // ============================================================
+
 export async function getHistory() {
   const res = await apiClient.get("/history");
   return res.data;
@@ -104,43 +157,58 @@ export async function getHistoryByType(measurementType) {
 // ============================================================
 // Count
 // ============================================================
+
 export async function getRecordCount() {
   const res = await apiClient.get("/count");
   return res.data;
 }
 
 // ============================================================
-// Delete all history
+// Delete History
 // ============================================================
+
 export async function deleteHistory() {
   const res = await apiClient.delete("/history");
   return res.data;
 }
 
 // ============================================================
-// Auth helpers
+// Authentication
 // ============================================================
+
 export function loginWithGoogle() {
   window.location.href = `${BASE_URL}/api/auth/login`;
 }
 
 export function logout() {
-    localStorage.removeItem("jwt");
-    window.location.href = "/api/auth/login";
+  localStorage.removeItem("jwt");
+  window.location.href = `${BASE_URL}/api/auth/login`;
 }
 
 export function isLoggedIn() {
   return Boolean(localStorage.getItem("jwt"));
 }
 
-// Units available per measurement type (matches backend enums).
+// ============================================================
+// Units
+// ============================================================
+
 export const UNITS_BY_TYPE = {
   LENGTH: ["FEET", "INCHES", "YARDS", "CENTIMETERS"],
   WEIGHT: ["GRAM", "KILOGRAM", "TONNE"],
   TEMPERATURE: ["CELSIUS", "FAHRENHEIT"],
   VOLUME: ["LITRE", "MILLILITRE", "GALLON"],
 };
-//
 
-// Operation types (matches backend OperationType enum) — used for history filter.
-export const OPERATION_TYPES = ["COMPARE", "CONVERT", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE"];
+// ============================================================
+// Operations
+// ============================================================
+
+export const OPERATION_TYPES = [
+  "COMPARE",
+  "CONVERT",
+  "ADD",
+  "SUBTRACT",
+  "MULTIPLY",
+  "DIVIDE",
+];
