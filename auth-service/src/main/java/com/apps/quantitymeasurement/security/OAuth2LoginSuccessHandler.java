@@ -43,7 +43,7 @@ public class OAuth2LoginSuccessHandler
 
 
         response.sendRedirect(
-                "\"http://13.49.123.197/login?token=" + token +
+                "http://ec2-13-49-123-197.eu-north-1.compute.amazonaws.com/login?token=" + token +
                         "&name=" + URLEncoder.encode(name, StandardCharsets.UTF_8) +
                         "&email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) +
                         "&picture=" + URLEncoder.encode(picture, StandardCharsets.UTF_8)
