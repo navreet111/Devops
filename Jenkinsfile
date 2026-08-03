@@ -6,7 +6,7 @@ pipeline {
         stage('Build Auth Service') {
             steps {
                 dir('auth-service') {
-                    sh './mvnw clean package'
+                    sh 'mvn clean package'
                 }
             }
         }
@@ -14,7 +14,7 @@ pipeline {
         stage('Build Quantity Service') {
             steps {
                 dir('quantity-service') {
-                    sh './mvnw clean package'
+                   sh 'mvn clean package'
                 }
             }
         }
