@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Auth-service (Google login) — port 8080
-export const BASE_URL = "http://localhost:8080";
+export const BASE_URL = "http://ec2-13-49-123-197.eu-north-1.compute.amazonaws.com:8081";
 
 // Quantity-service (business APIs) — port 8081
 export const QUANTITY_BASE_URL = "http://localhost:8081";
