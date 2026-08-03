@@ -73,7 +73,7 @@ pipeline {
 
                 docker stop quantity-service || true
                 docker rm quantity-service || true
-                docker run -d --name quantity-service -p 8082:8080 navreet1511/quantity-service:latest
+                docker run -d --name quantity-service -p 8082:8081 navreet1511/quantity-service:latest
 
                 docker stop quantity-frontend || true
                 docker rm quantity-frontend || true
